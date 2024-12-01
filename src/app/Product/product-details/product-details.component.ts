@@ -1,0 +1,103 @@
+import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { ProduitService } from '../../services/Produit/produit.service';
+import { Produit } from '../../models/Produit';
+import { ShopService } from '../../services/Shop/shop.service';
+import { Shop } from '../../models/Shop';
+import { forkJoin } from 'rxjs';
+import { CommentaireService } from '../../services/Commentaire/commentaire.service';
+import { Commentaire } from '../../models/Commentaire';
+
+@Component({
+  selector: 'app-product-details',
+  templateUrl: './product-details.component.html',
+  styleUrls: ['./product-details.component.css']
+})
+export class ProductDetailsComponent implements OnInit {
+
+  ItemId: number | any;
+  produit?: Produit;
+  shops?: Shop[];
+  shopContainingProduit?: Shop;
+
+  commentText: string = '';
+
+  constructor(
+    private route: ActivatedRoute,
+    private produitService: ProduitService,
+    private shopService: ShopService,
+    private commService : CommentaireService,
+  ) {}
+
+  ngOnInit(): void {
+    this.route.paramMap.subscribe(params => {
+      this.ItemId = params.get('pid'); // Convert the parameter to a number
+      console.log(this.ItemId);
+
+      // Load the product and all shops in parallel
+      forkJoin({
+        produit: this.produitService.getProduitById(this.ItemId),
+        shops: this.shopService.getAllShops()
+      }).subscribe(({ produit, shops }) => {
+        this.produit = produit;
+        this.shops = shops;
+        this.findShopContainingProduit();
+      });
+    });
+  }
+
+  findShopContainingProduit(): void {
+    if (this.produit && this.shops) {
+      this.shopContainingProduit = this.shops.find(shop => 
+        shop.produits.some(produit => produit.id === this.produit?.id)
+      );
+      console.log('Shop containing product:', this.shopContainingProduit);
+    }
+  }
+
+  onSubmit(): void {
+    if (this.commentText.trim()) {
+      const commentaire: any = {
+        uname: 'User Name', // Replace with the actual user name
+        text: this.commentText,
+        date: new Date().toDateString(),
+        note: 5 
+      };
+      this.commService.createCommentaire(commentaire, 1, this.ItemId) // Replace '1' with the actual user ID
+        .subscribe(
+          response => {
+            console.log('Commentaire created:', response);
+            this.commentText = '';
+            this.produitService.getProduitById(this.ItemId).subscribe(
+              (produit: Produit) => {
+                this.produit = produit;
+                console.log(produit);
+                this.findShopContainingProduit(); // Re-find the shop containing the updated product
+              }
+            );
+          },
+          error => {
+            console.error('Error creating commentaire:', error);
+          }
+        );
+    }
+  }
+
+  downloadImage(): void {
+    if (this.produit?.fichier) {
+      const link = document.createElement('a');
+      link.href = this.produit.fichier;
+      link.download = 'product-image'; // Set default file name
+      link.click();
+    } else {
+      console.error('Image not available for download.');
+    }
+  }
+
+  handleImageError(event: Event) {
+    const target = event.target as HTMLImageElement;
+    target.src = 'assets/product.jpg'; // Fallback image
+}
+
+
+}

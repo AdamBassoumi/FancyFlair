@@ -1,0 +1,96 @@
+<app-navbar></app-navbar>
+<img src="assets/create.png" alt="Background Image" class="absolute mt w-full h-full object-cover z-negative" />
+<div class="relative min-h-screen">
+
+  
+
+  <div class="relative max-w-4xl mt-11 mx-auto p-6 shadow-md bg-white rounded-lg z-10">
+    <h2 class="text-2xl font-bold mb-4">Create Your Shop</h2>
+
+    <app-steps-indicator [steps]="['Shop Details', 'Shop Address', 'Review and Submit']" [currentStep]="step"></app-steps-indicator>
+
+    <form (ngSubmit)="onSubmit()" #shopForm="ngForm">
+      <div *ngIf="step === 1">
+        <div class="mb-4">
+          <label for="shopName" class="block text-gray-700 text-sm font-bold mb-2">Shop Name</label>
+          <input
+            id="shopName"
+            type="text"
+            name="shopName"
+            [(ngModel)]="shopData.shopName"
+            required
+            class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+        </div>
+        <div class="mb-4">
+          <label for="shopDescription" class="block text-gray-700 text-sm font-bold mb-2">Shop Description</label>
+          <textarea
+            id="shopDescription"
+            name="shopDescription"
+            [(ngModel)]="shopData.shopDescription"
+            required
+            rows="4"
+            class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+          ></textarea>
+        </div>
+        <button
+          type="button"
+          (click)="nextStep()"
+          class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+        >
+          Next
+        </button>
+      </div>
+
+      <div *ngIf="step === 2">
+        <div class="mb-4">
+          <label for="shopAddress" class="block text-gray-700 text-sm font-bold mb-2">Shop Address</label>
+          <input
+            id="shopAddress"
+            type="text"
+            name="shopAddress"
+            [(ngModel)]="shopData.shopAddress"
+            required
+            class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+        </div>
+        <button
+          type="button"
+          (click)="prevStep()"
+          class="bg-gray-500 text-white px-4 py-2 rounded-md hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-500"
+        >
+          Back
+        </button>
+        <button
+          type="button"
+          (click)="nextStep()"
+          class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+        >
+          Next
+        </button>
+      </div>
+
+      <div *ngIf="step === 3">
+        <p class="mb-4">Please review your shop details before submitting.</p>
+        <div class="mb-4">
+          <p><strong>Shop Name:</strong> {{ shopData.shopName }}</p>
+          <p><strong>Shop Description:</strong> {{ shopData.shopDescription }}</p>
+          <p><strong>Shop Address:</strong> {{ shopData.shopAddress }}</p>
+        </div>
+        <button
+          type="button"
+          (click)="prevStep()"
+          class="bg-gray-500 text-white px-4 py-2 rounded-md hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-500"
+        >
+          Back
+        </button>
+        <button
+          type="submit"
+          class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+        >
+          Submit
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

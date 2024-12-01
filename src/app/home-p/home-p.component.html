@@ -1,0 +1,102 @@
+<app-navbar></app-navbar>
+<div class="bg-cover bg-no-repeat bg-center py-36 relative" style="background-image: url('assets/bg.jpeg');">
+
+    <div class="absolute inset-0 bg-gray-200 opacity-50"></div>
+
+    <div class="container relative z-10">
+        <h1 class="text-6xl text-black uppercase mb-4">
+            Check out the season's <br>biggest trends
+        </h1>
+        <p class="text-gray-700 font-medium">Check out the newest templates design and shop for summer card occasions.
+            <br>
+            The latest collection includes a wide range of styles and
+            themes.
+        </p>
+        <div class="mt-12">
+            <a href="#" class="bg-[#FFFF81] text-gray-600 px-8 py-3 font-medium 
+                rounded-md hover:bg-red-500 hover:text-white">Shop Now</a>
+        </div>
+    </div>
+</div>
+<div class="container py-10">
+    <div class="w-10/12 grid grid-cols-1 md:grid-cols-3 gap-6 mx-auto justify-center">
+        <div class="border-2 border-[#59D6CE] rounded-md px-3 py-6 flex justify-center items-center gap-5">
+            <i class="fa-solid fa-download text-3xl"></i>
+            <div>
+                <h4 class="font-medium capitalize text-lg">Instant download</h4>
+                <p class="text-gray-500 text-sm">Receive your digital product <br> immediately after purchase.</p>
+            </div>
+        </div>
+        <div class="border-2 border-[#59D6CE] rounded-md px-3 py-6 flex justify-center items-center gap-5">
+            <i class="fa-solid fa-hand-holding-dollar text-3xl"></i>
+            <div>
+                <h4 class="font-medium capitalize text-lg">Money Rturns</h4>
+                <p class="text-gray-500 text-sm">Return it within 30 days <br> for a full refund.
+            </div>
+        </div>
+        <div class="border-2 border-[#59D6CE] rounded-md px-3 py-6 flex justify-center items-center gap-5">
+            <i class="fa-solid fa-headset text-3xl"></i>
+            <div>
+                <h4 class="font-medium capitalize text-lg">24/7 Support</h4>
+                <p class="text-gray-500 text-sm">An alwyas available <br> Customer support</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="container pb-16">
+    <h2 class="text-2xl font-medium text-gray-800 uppercase mb-6">recomended for you</h2>
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+        <div *ngFor="let produit of produits" class="bg-white shadow rounded overflow-hidden group">
+            <div class="relative">
+                <img 
+                    [src]="produit.fichier ? produit.fichier : 'assets/product.jpg'" 
+                    alt="product image" 
+                    class="w-full fixed-height"
+                    (error)="handleImageError($event)">
+                <div class="absolute inset-0 bg-black bg-opacity-40 flex items-center 
+                justify-center gap-2 opacity-0 group-hover:opacity-100 transition">
+                    <a [routerLink]="['/Item', produit.id]"
+                        class="text-white text-lg w-9 h-8 rounded-full bg-primary flex items-center justify-center hover:bg-gray-800 transition"
+                        title="view product">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                    </a>
+                    <a href="#"
+                        class="text-white text-lg w-9 h-8 rounded-full bg-primary flex items-center justify-center hover:bg-gray-800 transition"
+                        title="add to wishlist">
+                        <i class="fa-solid fa-heart"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="pt-4 pb-3 px-4">
+                <a href="#">
+                    <h4 class="uppercase font-medium text-xl mb-2 text-gray-800 hover:text-primary transition">
+                        {{produit.name}}</h4>
+                </a>
+                <div class="flex items-baseline mb-1 space-x-2">
+                    <p class="text-xl text-primary font-semibold">${{produit.prix}}</p>
+                    <p class="text-sm text-gray-400 line-through">$55.90</p>
+                </div>
+                <div class="flex items-center">
+                    <div class="flex gap-1 text-sm text-yellow-400">
+                        <span><i class="fa-solid fa-star"></i></span>
+                        <span><i class="fa-solid fa-star"></i></span>
+                        <span><i class="fa-solid fa-star"></i></span>
+                        <span><i class="fa-solid fa-star"></i></span>
+                        <span><i class="fa-solid fa-star"></i></span>
+                    </div>
+                    <div class="text-xs text-gray-500 ml-3">(150)</div>
+                </div>
+            </div>
+            <a [routerLink]="['/Item', produit.id]"
+                class="block w-full py-1 text-center text-white bg-primary rounded-b hover:bg-transparent hover:text-primary transition">Buy</a>
+        </div>
+    </div>
+    <div class="py-16">
+        <a href="#">
+            <img src="assets/ad.png" alt="ads" class="w-full">
+        </a>
+    </div>
+
+</div>

@@ -1,0 +1,108 @@
+<app-navbar></app-navbar>
+<div class="container my-6">
+  <div class="flex flex-col md:flex-row bg-white p-6">
+    <div class="md:w-1/2">
+      <img [src]="produit?.fichier || 'assets/product.jpg'" alt="Product Image" class="rounded-lg object-cover " (error)="handleImageError($event)">
+  <!-- Comment Section -->
+      <!-- Comment Section -->
+      <div class="mt-8">
+        <h2 class="text-2xl font-bold text-gray-800 mb-4">Customer Reviews</h2>
+
+        <div *ngFor="let com of this.produit?.commentaires" class="bg-gray-100 p-4 rounded-lg mb-4">
+          <p class="text-gray-800"><strong>{{com.uname }}:</strong> {{com.text}}</p>
+          <p class="text-gray-500 text-sm">Posted on {{com.date}}</p>
+        </div>
+
+
+        <div class="bg-gray-100 p-4 rounded-lg mb-4">
+          <form (ngSubmit)="onSubmit()" #commentForm="ngForm">
+            <textarea class="w-full p-2 rounded-lg border border-gray-300" rows="4" placeholder="Write your review here..." [(ngModel)]="commentText" name="commentText" required></textarea>
+            <button type="submit" class="bg-[#59D6CE] mt-2 px-6 py-2 rounded-md hover:bg-secondary transition duration-300" [disabled]="!commentForm.form.valid">Submit Review</button>
+          </form>
+        </div>
+        
+      </div>
+    </div>
+    <div class="md:w-1/2 md:ml-20 mt-4 md:mt-0">
+      <h1 class="text-4xl font-bold text-gray-800 mb-2">{{produit?.name}}</h1>
+      <div class="flex items-center mb-4">
+        <span class="text-2xl text-green-500 font-bold">€ {{produit?.prix}}</span>
+        <span class="text-xl text-gray-500 line-through ml-4">€18.00</span>
+        <span class="text-xl text-green-500 ml-2">25% off</span>
+      </div>
+      <p class="mb-4">{{produit?.description}}</p>
+      <div class="mt-2 text-sm text-black font-semibold">
+        SarraPlanners
+        <i class="fas fa-star text-yellow-500"></i>
+        <i class="fas fa-star text-yellow-500"></i>
+        <i class="fas fa-star text-yellow-500"></i>
+        <i class="fas fa-star text-yellow-500"></i>
+        <i class="fas fa-star-half-alt text-yellow-500"></i>
+      </div>
+      <button (click)="downloadImage()" class="bg-[#59D6CE] mt-4 w-full px-6 py-2 rounded-md hover:bg-secondary transition duration-300">Download</button>
+      <div class="mt-4 space-y-4">
+        <div>
+          <div class="font-bold text-lg flex items-center">
+            <i class="fas fa-info-circle mr-2"></i> Item details
+          </div>
+          <div class="pl-4">
+            <div class="font-bold flex items-center">
+              <i class="fas fa-star mr-2"></i> Highlights
+            </div>
+            <ul class="pl-4 list-disc">
+              <li>Designed by PlanwisePlanners</li>
+              <li>Party decor for gatherings and celebrations</li>
+              <li>Digital download</li>
+              <li>Digital file type(s): 1 PDF</li>
+            </ul>
+            <div class="font-bold mt-2 flex items-center">
+              <i class="fas fa-info-circle mr-2"></i> About this item
+            </div>
+            <p class="pl-4">Do you need a daily journal for Remarkable 2 that is flexible, customizable, and easy to
+              use? Daily Journal 2024 & 2025 is here for you!</p>
+          </div>
+        </div>
+        <div>
+          <div class="font-bold text-lg py-4 flex border-t border-gray-200 items-center">
+            <i class="fas fa-download mr-2"></i> Instant Download
+          </div>
+          <div class="pl-4">
+            <p class="pl-4">Your files will be available to download once payment is confirmed. Instant download items
+              don’t accept returns, exchanges, or cancellations. Please contact the seller about any problems with your
+              order.</p>
+          </div>
+        </div>
+        <div class="font-bold text-lg pt-4 flex border-t border-gray-200 items-center">
+          <i class="fas fa-question-circle"></i> FAQs
+        </div>
+        <p class="pl-4">Have any questions? Feel free to reach out to us.</p>
+
+        <div class="border-t border-gray-200 py-4">
+          <h3 class="text-md font-bold text"><i class="fas fa-user"></i> Meet your seller</h3>
+          <p>Aykut, Owner of PlanwisePlanners</p>
+          <button class="flex items-center bg-[#59D6CE] px-4 py-2 rounded-md hover:bg-secondary transition duration-300">
+            <i class="fas fa-heart text-white mr-2"></i> Follow This Shop
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+  <!-- More from this shop -->
+  <div class="mt-8">
+    <div class="flex justify-between items-center mb-4">
+      <h2 class="text-2xl font-bold text-gray-800">More from this shop</h2>
+    </div>
+    <div class="grid grid-cols-1 md:grid-cols-5 gap-4">
+      <div *ngFor="let produit of this.shopContainingProduit?.produits"  class="bg-white shadow-lg rounded-lg p-4">
+        <img [src]="produit?.fichier || 'assets/product.jpg'" alt="Product Image" (error)="handleImageError($event)" class="rounded-lg mb-2 fixed-height">
+        <h3 class="text-lg font-bold text-gray-800">{{produit.name}}</h3>
+        <p class="text-gray-500">$ {{produit.prix}}</p>
+      </div>
+      
+    </div>
+  </div>
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
