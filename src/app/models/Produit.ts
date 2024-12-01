@@ -1,5 +1,6 @@
 import { Category } from "./Category";
 import { Commentaire } from "./Commentaire";
+import { Shop } from "./Shop";
 
 export interface Produit {
     id: number;
@@ -10,5 +11,6 @@ export interface Produit {
     dateCreation: string; // Use string for ISO date format
     stock: number;
     category: Category;
+    shop: Shop
     commentaires: Commentaire[];
 }

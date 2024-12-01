@@ -31,28 +31,25 @@ export class ProductDetailsComponent implements OnInit {
 
   ngOnInit(): void {
     this.route.paramMap.subscribe(params => {
-      this.ItemId = params.get('pid'); // Convert the parameter to a number
+      this.ItemId = params.get('pid'); // Get the parameter
       console.log(this.ItemId);
-
-      // Load the product and all shops in parallel
-      forkJoin({
-        produit: this.produitService.getProduitById(this.ItemId),
-        shops: this.shopService.getAllShops()
-      }).subscribe(({ produit, shops }) => {
+  
+      // Load the product
+      this.produitService.getProduitById(this.ItemId).subscribe(produit => {
         this.produit = produit;
-        this.shops = shops;
-        this.findShopContainingProduit();
+        console.log('Produit:', this.produit);
+  
+        if (this.produit?.shop?.id) {
+          // Fetch the shop using the shop ID from the product
+          this.shopService.getShopById(this.produit.shop.id).subscribe(shop => {
+            this.shopContainingProduit = shop;
+            console.log('Shop containing product:', this.shopContainingProduit);
+          });
+        } else {
+          console.warn('The product does not have an associated shop ID.');
+        }
       });
     });
-  }
-
-  findShopContainingProduit(): void {
-    if (this.produit && this.shops) {
-      this.shopContainingProduit = this.shops.find(shop => 
-        shop.produits.some(produit => produit.id === this.produit?.id)
-      );
-      console.log('Shop containing product:', this.shopContainingProduit);
-    }
   }
 
   onSubmit(): void {
@@ -72,7 +69,7 @@ export class ProductDetailsComponent implements OnInit {
               (produit: Produit) => {
                 this.produit = produit;
                 console.log(produit);
-                this.findShopContainingProduit(); // Re-find the shop containing the updated product
+                //this.findShopContainingProduit(); // Re-find the shop containing the updated product
               }
             );
           },
