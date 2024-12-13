@@ -7,6 +7,7 @@ import { Shop } from '../../models/Shop';
 import { forkJoin } from 'rxjs';
 import { CommentaireService } from '../../services/Commentaire/commentaire.service';
 import { Commentaire } from '../../models/Commentaire';
+import { UtilisateurService } from 'src/app/services/Utilisateur/utilisateur.service';
 
 @Component({
   selector: 'app-product-details',
@@ -27,6 +28,7 @@ export class ProductDetailsComponent implements OnInit {
     private produitService: ProduitService,
     private shopService: ShopService,
     private commService : CommentaireService,
+    private utilisateurService: UtilisateurService,
   ) {}
 
   ngOnInit(): void {
@@ -94,6 +96,30 @@ export class ProductDetailsComponent implements OnInit {
   handleImageError(event: Event) {
     const target = event.target as HTMLImageElement;
     target.src = 'assets/product.jpg'; // Fallback image
+}
+
+followShop(): void {
+  // Get the user ID from local storage
+  const user = JSON.parse(localStorage.getItem('user')!);
+  const userId = user?.id;
+
+  if (userId && this.shopContainingProduit?.id) {
+    // Call addFavoriteShop API to follow the shop
+    const shopid : number  = this.shopContainingProduit?.id;
+    this.utilisateurService.addFavoriteShop(userId, shopid).subscribe(
+      (response) => {
+        console.log('Shop followed successfully:', response);
+        alert('Shop has been added to your favorites!');
+      },
+      (error) => {
+        console.error('Error following shop:', error);
+        alert('There was an error while trying to follow the shop.');
+      }
+    );
+  } else {
+    console.warn('User is not logged in or shop ID is missing');
+    alert('Please log in to follow the shop');
+  }
 }
 
 
