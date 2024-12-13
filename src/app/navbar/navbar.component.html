@@ -15,8 +15,7 @@
     </div>
     <div class="flex items-center space-x-4">
       <a *ngIf="!isUserLoggedIn()" (click)="login()" href="/login" class="text-gray-600 hover:text-gray-800">Login</a>
-      <a *ngIf="!isUserLoggedIn()" (click)="login()" href="/login"
-        class="text-gray-600 hover:text-gray-800">Register</a>
+      <a *ngIf="!isUserLoggedIn()" href="/register" class="text-gray-600 hover:text-gray-800">Register</a>
       <a *ngIf="isUserLoggedIn()" (click)="logout()" href="#" class="text-gray-600 hover:text-gray-800">Logout</a>
 
       <!-- Show 'Sell on FencyFlair' if the user does not have a shop -->

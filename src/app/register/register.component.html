@@ -1,0 +1,59 @@
+<app-navbar></app-navbar>
+<div class="min-h-screen bg-[#F7F2EF] flex">
+    
+
+    <div class="w-1/2 flex items-center justify-center bg-[#01A58D]">
+        <div class="w-full max-w-lg mx-auto shadow px-6 py-7 rounded overflow-hidden bg-white">
+            <h2 class="text-2xl uppercase font-medium mb-1">Register</h2>
+            <p class="text-gray-600 mb-6 text-sm">Welcome to FancyFlair</p>
+            <form (ngSubmit)="onSubmit()" #loginForm="ngForm">
+                <div class="space-y-2">
+                    <div>
+                        <label for="email" class="text-gray-600 mb-2 font-medium block">Email address</label>
+                        <input type="text" name="email" id="email" ngModel
+                            class="block w-full border border-gray-300 px-4 py-3 text-gray-600 text-sm rounded focus:ring-0 focus:border-primary placeholder-gray-400"
+                            placeholder="Type in You Email !" required>
+                    </div>
+                    <div>
+                        <label for="password" class="text-gray-600 font-medium mb-2 block">Password</label>
+                        <input type="password" name="password" id="password" ngModel
+                            class="block w-full border border-gray-300 px-4 py-3 text-gray-600 text-sm rounded focus:ring-0 focus:border-primary placeholder-gray-400"
+                            placeholder="Type in You Password !" required>
+                    </div>
+                </div>
+                <div class="flex items-center justify-between mt-6">
+                    <div class="flex items-center">
+                        <input type="checkbox" name="remember" id="remember" ngModel
+                            class="text-primary focus:ring-0 rounded-sm cursor-pointer">
+                        <label for="remember" class="text-gray-600 ml-3 cursor-pointer">Remember me</label>
+                    </div>
+                 
+                </div>
+                <div class="mt-4">
+                    <button type="submit"
+                        class="block w-full py-2 text-center text-white bg-[#59D6CE] rounded hover:bg-[#FFEEAE] hover:text-black transition uppercase font-roboto font-medium">Login</button>
+                </div>
+            </form>
+
+            <div class="mt-6 flex justify-center relative">
+                <div class="text-gray-600 uppercase px-3 bg-white z-10 relative">Or Register with</div>
+                <div class="absolute left-0 top-3 w-full border-b-2 border-gray-200"></div>
+            </div>
+            <div class="my-4 flex gap-4">
+                <a href="#"
+                    class="w-1/2 py-2 text-center text-white bg-blue-800 rounded uppercase font-roboto font-medium text-sm hover:bg-blue-700">Facebook</a>
+                <a href="#"
+                    class="w-1/2 py-2 text-center text-white bg-[#FD3D57] rounded uppercase font-roboto font-medium text-sm hover:bg-red-500">Google</a>
+            </div>
+
+            <p class="text-center text-gray-600">You have an account? <a href="login.component.html"
+                    class="text-[#59D6CE] font-bold">Register</a></p>
+        </div>
+    </div>
+    <div class="w-1/2 mt-28 h-full bg-center">
+        <img src="assets/register.jpg" alt="" class="h-full w-full object-cover">
+        <div class="h-full flex items-center justify-center">
+            <p class="text-white">Image placeholder</p>
+        </div>
+    </div>
+</div>

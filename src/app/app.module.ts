@@ -19,6 +19,7 @@ import { AddProductComponent } from './Product/add-product/add-product.component
 import { StepsIndicatorComponent } from './Shop/steps-indicator/steps-indicator.component';
 import { WishlistPopupComponent } from './wishlist-popup/wishlist-popup.component';
 import { FollowedShopsDropdownComponent } from './followed-shops-dropdown/followed-shops-dropdown.component';
+import { RegisterComponent } from './register/register.component';
 
 
 @NgModule({
@@ -38,6 +39,7 @@ import { FollowedShopsDropdownComponent } from './followed-shops-dropdown/follow
     StepsIndicatorComponent,
     WishlistPopupComponent,
     FollowedShopsDropdownComponent,
+    RegisterComponent,
   ],
   imports: [
     BrowserModule,

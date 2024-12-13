@@ -7,6 +7,7 @@ import { LoginComponent } from './login/login.component';
 import { ShopComponent } from './Shop/shop_page/shop.component';
 import { UserShopComponent } from './Shop/user-shop/user-shop.component';
 import { AddProductComponent } from './Product/add-product/add-product.component';
+import { RegisterComponent } from './register/register.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/home', pathMatch: 'full' },
@@ -14,6 +15,7 @@ const routes: Routes = [
   { path: 'home', component: HomePComponent },
   { path: 'Item/:pid', component: ProductDetailsComponent},
   { path: 'login', component: LoginComponent},
+  {path: 'register', component: RegisterComponent},
   { path: 'MyShop', component: UserShopComponent},
   { path: 'addItem', component: AddProductComponent},
   { path: '**', component: HomePComponent},
