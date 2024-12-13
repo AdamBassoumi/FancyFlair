@@ -35,11 +35,37 @@
           (click)="toggleWishlist()"
         >
         </button>
+        <div class="relative">
+          <!-- Dropdown Trigger Button -->
+          <button
+            class="flex items-center space-x-2 bg-gray-100 px-4 py-2 rounded-lg shadow hover:bg-gray-200 focus:outline-none"
+            (click)="toggleDropdown()"
+          >
+            <img src="assets/shops.png" alt="follow" class="h-6" />
+          </button>
+        
+          <!-- Dropdown Menu -->
+          <ul
+            *ngIf="dropdownOpen"
+            class="absolute mt-2 bg-white border border-gray-200 rounded-lg shadow w-48 max-h-60 overflow-y-auto"
+          >
+            <li
+              *ngFor="let shop of followedShops"
+              class="px-4 py-2 hover:bg-gray-100 cursor-pointer text-gray-700"
+            >
+              {{ shop }}
+            </li>
+          </ul>
+        </div>
+        
             </div>
             <app-wishlist-popup
           [isVisible]="showWishlist"
           (close)="showWishlist = false"
         ></app-wishlist-popup>
+          <app-followed-shops-dropdown></app-followed-shops-dropdown>
+        
+        
   
   </div>
 </nav>

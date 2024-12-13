@@ -11,11 +11,17 @@ import { Utilisateur } from '../models/Utilisateur';
   styleUrls: ['./navbar.component.css']
 })
 export class NavbarComponent implements OnInit {
-  title = 'Angular';
+   title = 'Angular';
   showWishlist: boolean = false;
 
   toggleWishlist() {
     this.showWishlist = !this.showWishlist;
+  }
+  followedShops = ['Shop 1', 'Shop 2', 'Shop 3', 'Shop 4', 'Shop 5'];
+  dropdownOpen: boolean = false;
+
+  toggleDropdown() {
+    this.dropdownOpen = !this.dropdownOpen;
   }
   utilisateur?: Utilisateur;
 
