@@ -20,6 +20,7 @@ import { StepsIndicatorComponent } from './Shop/steps-indicator/steps-indicator.
 import { WishlistPopupComponent } from './wishlist-popup/wishlist-popup.component';
 import { FollowedShopsDropdownComponent } from './followed-shops-dropdown/followed-shops-dropdown.component';
 import { RegisterComponent } from './register/register.component';
+import { EditProdComponent } from './Product/edit-prod/edit-prod.component';
 
 
 @NgModule({
@@ -40,6 +41,7 @@ import { RegisterComponent } from './register/register.component';
     WishlistPopupComponent,
     FollowedShopsDropdownComponent,
     RegisterComponent,
+    EditProdComponent,
   ],
   imports: [
     BrowserModule,

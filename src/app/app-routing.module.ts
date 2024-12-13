@@ -8,6 +8,7 @@ import { ShopComponent } from './Shop/shop_page/shop.component';
 import { UserShopComponent } from './Shop/user-shop/user-shop.component';
 import { AddProductComponent } from './Product/add-product/add-product.component';
 import { RegisterComponent } from './register/register.component';
+import { EditProdComponent } from './Product/edit-prod/edit-prod.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/home', pathMatch: 'full' },
@@ -18,6 +19,7 @@ const routes: Routes = [
   {path: 'register', component: RegisterComponent},
   { path: 'MyShop', component: UserShopComponent},
   { path: 'addItem', component: AddProductComponent},
+  { path: 'editProduct/:pid', component: EditProdComponent},
   { path: '**', component: HomePComponent},
 ];
 
