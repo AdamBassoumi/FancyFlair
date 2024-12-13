@@ -16,19 +16,6 @@ export class LoginComponent {
   ) {}
 
   ngOnInit(): void {
-    this.loadUtilisateurs();
-  }
-
-  loadUtilisateurs(): void {
-    this.utilisateurService.getAllUtilisateurs().subscribe(
-      utilisateurs => {
-        this.utilisateurs = utilisateurs;
-        console.log('Utilisateurs:', this.utilisateurs);
-      },
-      error => {
-        console.error('Error loading utilisateurs', error);
-      }
-    );
   }
 
   onSubmit(): void {
