@@ -31,13 +31,19 @@ export class UtilisateurService {
     return this.http.delete<void>(`${this.apiUrl}/${id}`);
   }
 
-    // Add a shop to the user's favorites
-    addFavoriteShop(userId: number, shopId: number): Observable<Utilisateur> {
-      return this.http.post<Utilisateur>(`${this.apiUrl}/${userId}/favorites/${shopId}`, {});
-    }
-  
-    // Remove a shop from the user's favorites
-    removeFavoriteShop(userId: number, shopId: number): Observable<Utilisateur> {
-      return this.http.delete<Utilisateur>(`${this.apiUrl}/${userId}/favorites/${shopId}`);
-    }
+  // Add a shop to the user's favorites
+  addFavoriteShop(userId: number, shopId: number): Observable<Utilisateur> {
+    return this.http.post<Utilisateur>(`${this.apiUrl}/${userId}/favorites/${shopId}`, {});
+  }
+
+  // Remove a shop from the user's favorites
+  removeFavoriteShop(userId: number, shopId: number): Observable<Utilisateur> {
+    return this.http.delete<Utilisateur>(`${this.apiUrl}/${userId}/favorites/${shopId}`);
+  }
+
+  // Validate user credentials
+  validateUserCredentials(email: string, mdp: string): Observable<Utilisateur> {
+    const credentials = { email, mdp };
+    return this.http.post<Utilisateur>(`${this.apiUrl}/validate`, credentials);
+  }
 }

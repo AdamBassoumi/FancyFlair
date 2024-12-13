@@ -34,17 +34,23 @@ export class LoginComponent {
   onSubmit(): void {
     const emailOrUsername = (document.getElementById('email') as HTMLInputElement).value;
     const password = (document.getElementById('password') as HTMLInputElement).value;
-
-    const user = this.utilisateurs?.find(u => 
-      (u.email === emailOrUsername || u.nom === emailOrUsername) && u.mdp === password
-    );
-
-    if (user) {
-      console.log('User found:', user);
-      localStorage.setItem('user', JSON.stringify({ id: user.id, name: user.nom }));
-      this.router.navigate(['/']);
-    } else {
-      console.log('Invalid credentials');
-    }
+  
+    // Call the backend to validate credentials and get user object
+    this.utilisateurService.validateUserCredentials(emailOrUsername, password).subscribe({
+      next: (user: Utilisateur) => {
+        if (user) {
+          console.log('User authenticated:', user);
+          // Store user information in localStorage
+          localStorage.setItem('user', JSON.stringify({ id: user.id, email: user.email }));
+          this.router.navigate(['/']);
+        } else {
+          console.log('Invalid credentials');
+        }
+      },
+      error: (err) => {
+        console.error('Error during authentication:', err);
+      }
+    });
   }
+  
 }
