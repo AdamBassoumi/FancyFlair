@@ -3,10 +3,10 @@
     <a href="/" class="flex items-center">
       <img src="assets/logo.png" alt="Logo" class="h-16">
     </a>
-   
-    
+
+
     <div class="flex-grow mx-6 relative">
-      <input type="text" placeholder="Search for anything" class="w-full p-2 border rounded-xl pr-10">
+      <input type="text" placeholder="Search for anything" class="w-full p-2 border rounded-xl ">
       <div class="absolute inset-y-0 right-0 flex items-center pr-1">
         <div class="w-10 h-8 bg-[#59D6CE] rounded-xl flex items-center justify-center">
           <img src="assets/search.svg" alt="Search Icon" class="w-4 h-4">
@@ -15,19 +15,22 @@
     </div>
     <div class="flex items-center space-x-4">
       <a *ngIf="!isUserLoggedIn()" (click)="login()" href="/login" class="text-gray-600 hover:text-gray-800">Login</a>
-      <a *ngIf="!isUserLoggedIn()" (click)="login()" href="/login" class="text-gray-600 hover:text-gray-800">Register</a>
+      <a *ngIf="!isUserLoggedIn()" (click)="login()" href="/login"
+        class="text-gray-600 hover:text-gray-800">Register</a>
       <a *ngIf="isUserLoggedIn()" (click)="logout()" href="#" class="text-gray-600 hover:text-gray-800">Logout</a>
-      
-<!-- Show 'Sell on FencyFlair' if the user does not have a shop -->
-<a *ngIf="!hasShop() && isUserLoggedIn()" href="/RegisterShop" class="text-gray-600 hover:text-gray-800 bg-gray-200 rounded-xl py-2 px-3">Sell on FencyFlair</a>
 
-<a *ngIf="!hasShop()" href="/login" class="text-gray-600 hover:text-gray-800 bg-gray-200 rounded-xl py-2 px-3">Sell on FencyFlair</a>
+      <!-- Show 'Sell on FencyFlair' if the user does not have a shop -->
+      <a *ngIf="!hasShop() && isUserLoggedIn()" href="/RegisterShop"
+        class="text-gray-600 hover:text-gray-800 bg-gray-200 rounded-xl py-2 px-3">Sell on FencyFlair</a>
 
-<!-- Show 'Manage Shop' if the user has a shop -->
-<a *ngIf="hasShop()" href="/MyShop" class="text-gray-600 hover:text-gray-800 bg-gray-200 rounded-xl py-2 px-3">Manage Shop</a>
+      <a *ngIf="!hasShop()" href="/login"
+        class="text-gray-600 hover:text-gray-800 bg-gray-200 rounded-xl py-2 px-3">Sell on FancyFlair</a>
+
+      <!-- Show 'Manage Shop' if the user has a shop -->
+      <a *ngIf="hasShop()" href="/MyShop"
+        class="text-gray-600 hover:text-gray-800 bg-gray-200 rounded-xl py-2 px-3">Manage Shop</a>
 
       <a href="#" class="text-gray-600 hover:text-gray-800"><img src="assets/heart.svg" alt="Logo" class="h-6"></a>
     </div>
   </div>
 </nav>
-
