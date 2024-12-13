@@ -99,7 +99,7 @@ export class AddProductComponent implements OnInit {
     this.produitService.createProduit(newProduit, +shopId, category.id).subscribe(
       (produit) => {
         console.log('Produit successfully added:', produit);
-        // Optionally, redirect or display a success message
+        
       },
       (error) => {
         console.error('Error adding produit:', error);
