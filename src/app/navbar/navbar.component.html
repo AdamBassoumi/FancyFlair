@@ -30,7 +30,16 @@
       <a *ngIf="hasShop()" href="/MyShop"
         class="text-gray-600 hover:text-gray-800 bg-gray-200 rounded-xl py-2 px-3">Manage Shop</a>
 
-      <a href="#" class="text-gray-600 hover:text-gray-800"><img src="assets/heart.svg" alt="Logo" class="h-6"></a>
-    </div>
+        <a *ngIf="hasShop()" href="/MyShop" class="text-gray-600 hover:text-gray-800 bg-gray-200 rounded-xl py-2 px-3">Manage Shop</a>
+        <button><img src="assets/heart.svg" alt="Logo" class="h-6"
+          (click)="toggleWishlist()"
+        >
+        </button>
+            </div>
+            <app-wishlist-popup
+          [isVisible]="showWishlist"
+          (close)="showWishlist = false"
+        ></app-wishlist-popup>
+  
   </div>
 </nav>

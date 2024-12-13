@@ -11,6 +11,12 @@ import { Utilisateur } from '../models/Utilisateur';
   styleUrls: ['./navbar.component.css']
 })
 export class NavbarComponent implements OnInit {
+  title = 'Angular';
+  showWishlist: boolean = false;
+
+  toggleWishlist() {
+    this.showWishlist = !this.showWishlist;
+  }
   utilisateur?: Utilisateur;
 
   minPrice: number = 0;

@@ -17,6 +17,7 @@ import { LoginComponent } from './login/login.component';
 import { UserShopComponent } from './Shop/user-shop/user-shop.component';
 import { AddProductComponent } from './Product/add-product/add-product.component';
 import { StepsIndicatorComponent } from './Shop/steps-indicator/steps-indicator.component';
+import { WishlistPopupComponent } from './wishlist-popup/wishlist-popup.component';
 
 
 @NgModule({
@@ -34,6 +35,7 @@ import { StepsIndicatorComponent } from './Shop/steps-indicator/steps-indicator.
     UserShopComponent,
     AddProductComponent,
     StepsIndicatorComponent,
+    WishlistPopupComponent,
   ],
   imports: [
     BrowserModule,
