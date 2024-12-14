@@ -1,12 +1,19 @@
 <app-navbar></app-navbar>
 <div class="container pt-8 flex items-center">
     <div class="bg-[#ACD0CE] w-1/2 rounded-md h-fit">
-        <p class="text-2xl font-medium px-4 pt-2 text-black">Shop</p>    </div>
-      
-    <button
+        <p class="text-2xl font-medium px-4 pt-2 text-black">Shop</p>
+    </div>
+
+    <button *ngIf="!isShopInFavorites()" (click)="followShop()"
         class="ml-auto flex items-center gap-2 text-white bg-blue-900 px-4 py-3 rounded hover:bg-gray-800 transition">
         <i class="fa-solid fa-plus"></i>
         <span>Follow Shop</span>
+    </button>
+
+    <button *ngIf="isShopInFavorites()" (click)="unfollowShop()"
+        class="ml-auto flex items-center gap-2 text-white bg-red-600 px-4 py-3 rounded hover:bg-red-800 transition">
+        <i class="fa-solid fa-minus"></i>
+        <span>Unfollow Shop</span>
     </button>
 </div>
 
@@ -30,7 +37,7 @@
                         (change)="handleCheckboxChange(category.id)"
                         class="text-primary focus:ring-0 rounded-sm cursor-pointer">
                     <label for="cat-1" class="text-gray-600 ml-3 cusror-pointer">{{category.name}}</label>
-                    <div class="ml-auto text-gray-600 text-sm">(15)</div>
+                    <!-- <div class="ml-auto text-gray-600 text-sm">(15)</div> -->
                 </div>
             </div>
         </div>
@@ -43,20 +50,19 @@
                 <div *ngFor="let produit of shop?.produits" class="bg-white shadow rounded overflow-hidden group">
                     <div class="relative">
                         <img [src]="produit.fichier ? produit.fichier : 'assets/bullet.png'"
-                             (error)="handleImageError($event)"
-                             alt="product image" class="w-full fixed-height">
+                            (error)="handleImageError($event)" alt="product image" class="w-full fixed-height">
                         <div class="absolute inset-0 bg-black bg-opacity-40 flex items-center 
                         justify-center gap-2 opacity-0 group-hover:opacity-100 transition">
-                            <a href="#"
-                                class="text-white text-lg w-9 h-8 rounded-full bg-primary flex items-center justify-center hover:bg-gray-800 transition"
-                                title="view product">
-                                <i class="fa-solid fa-magnifying-glass"></i>
-                            </a>
-                            <a href="#"
+                        <a [routerLink]="['/Item', produit.id]"
+                        class="text-white text-lg w-9 h-8 rounded-full bg-primary flex items-center justify-center hover:bg-gray-800 transition"
+                        title="view product">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                    </a>
+                            <button (click)="addToWishlist(produit.id)"
                                 class="text-white text-lg w-9 h-8 rounded-full bg-primary flex items-center justify-center hover:bg-gray-800 transition"
                                 title="add to wishlist">
-                                <i class="fa-solid fa-pen-to-square"></i>
-                            </a>
+                                <i class="fa-solid fa-heart"></i>
+                            </button>
                         </div>
                     </div>
                     <div class="pt-4 pb-3 px-4">

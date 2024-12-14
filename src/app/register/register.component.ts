@@ -22,12 +22,14 @@ export class RegisterComponent {
   onSubmit(): void {
     // Get the values from the form
     const name = (document.getElementById('name') as HTMLInputElement).value;
+    const lastname = (document.getElementById('lastname') as HTMLInputElement).value;
     const email = (document.getElementById('email') as HTMLInputElement).value;
     const password = (document.getElementById('password') as HTMLInputElement).value;
   
     // Create the user object
     const newUser: Utilisateur = {
       nom: name,
+      prenom: lastname,
       email: email,
       mdp: password,
       // You can add other fields like address, phone, etc. if necessary

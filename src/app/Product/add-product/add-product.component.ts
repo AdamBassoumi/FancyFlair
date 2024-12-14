@@ -5,6 +5,7 @@ import { ProduitService } from '../../services/Produit/produit.service'; // Impo
 import { Category } from '../../models/Category';
 import { Produit } from '../../models/Produit';
 import { HttpClient } from '@angular/common/http';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-add-product',
@@ -24,8 +25,9 @@ export class AddProductComponent implements OnInit {
 
   constructor(
     private categoryService: CategoryService,
-    private produitService: ProduitService, // Inject the ProduitService
-    private http: HttpClient
+    private produitService: ProduitService,
+    private http: HttpClient,
+        private router: Router, // Inject Router for navigation
   ) {}
 
   ngOnInit(): void {
@@ -88,9 +90,7 @@ export class AddProductComponent implements OnInit {
       prix: parseFloat(price),
       fichier: this.selectedFile ? 'assets/produits/' + this.selectedFile.name : '',
       dateCreation: new Date().toString(),
-      stock: 0, // Set default stock value
       category: category,
-      commentaires: [] // No comments initially
     };
   
     console.log('Produit to add:', newProduit);
@@ -99,6 +99,7 @@ export class AddProductComponent implements OnInit {
     this.produitService.createProduit(newProduit, +shopId, category.id).subscribe(
       (produit) => {
         console.log('Produit successfully added:', produit);
+        this.router.navigate(['/MyShop']);
         
       },
       (error) => {

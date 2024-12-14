@@ -2,9 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Category } from 'src/app/models/Category';
 import { Shop } from 'src/app/models/Shop';
+import { Wishlist } from 'src/app/models/Wishlist';
 import { CategoryService } from 'src/app/services/Category/category.service';
 import { ShopService } from 'src/app/services/Shop/shop.service';
 import { UtilisateurService } from 'src/app/services/Utilisateur/utilisateur.service';
+import { WishlistService } from 'src/app/services/Wishlist/wishlist-service.service';
 
 @Component({
   selector: 'app-visit-shop',
@@ -20,18 +22,58 @@ export class VisitShopComponent implements OnInit {
   shop?: Shop;
   utilisateur: any; // To hold the user data
 
+    favoriteShops: Shop[] = [];
+    wishlists: Wishlist[] = [];
+
   constructor(
     private shopService: ShopService,
     private categoryService: CategoryService,
     private route: ActivatedRoute,
     private utilisateurService: UtilisateurService, // Inject the utilisateur service
+    private wishlistService: WishlistService,
     private router: Router // Inject Router for navigation
   ) {}
 
   ngOnInit(): void {
     this.loadUtilisateur(); // Load utilisateur data first
     this.loadCategories();
+
+        // Get user ID from local storage
+        const user = JSON.parse(localStorage.getItem('user')!);
+        const userId = user?.id;
+    
+        if (userId) {
+          // Fetch the user's favorite shops when the component initializes
+          this.getFavoriteShops(userId);
+          this.getUserWishlist(userId);
+        } else {
+          console.warn('User not logged in');
+        }
   }
+
+    getFavoriteShops(userId: number): void {
+      this.utilisateurService.getFavoriteShops(userId).subscribe(
+        (shops: Shop[]) => {
+          this.favoriteShops = shops;
+          console.log('Favorite shops:', this.favoriteShops);
+        },
+        (error) => {
+          console.error('Error fetching favorite shops:', error);
+        }
+      );
+    }
+  
+    getUserWishlist(userId: number): void {
+      this.wishlistService.getUserWishlist(userId).subscribe(
+        (wishlists: Wishlist[]) => {
+          this.wishlists = wishlists;
+          console.log('User wishlists:', this.wishlists);
+        },
+        (error) => {
+          console.error('Error fetching user wishlists:', error);
+        }
+      );
+    }
 
   loadUtilisateur(): void {
     // Assuming user information is available in localStorage
@@ -52,8 +94,6 @@ export class VisitShopComponent implements OnInit {
           // After utilisateur data is loaded, check shop ID and route
           this.route.paramMap.subscribe(params => {
             this.shopId = +params.get('sid')!; // Retrieve and convert the shop ID from the URL
-            console.log('Shop ID from route:', this.shopId);
-            console.log('Shop ID from user:', this.utilisateur?.shop?.id);
             
             if (this.shopId) {
               // Check if the current shopId matches the user's shop ID
@@ -124,5 +164,116 @@ export class VisitShopComponent implements OnInit {
   handleImageError(event: Event) {
     const target = event.target as HTMLImageElement;
     target.src = 'assets/bullet.png'; // Fallback image
+  }
+
+  async followShop(): Promise<void> {
+    // Get the user ID from local storage
+    const user = JSON.parse(localStorage.getItem('user')!);
+    const userId = user?.id;
+  
+    if (userId && this.shop?.id) {
+      try {
+        // Call addFavoriteShop API to follow the shop
+        const shopid: number = this.shop?.id;
+        await this.utilisateurService.addFavoriteShop(userId, shopid).toPromise();
+        console.log('Shop followed successfully');
+        alert('Shop has been added to your favorites!');
+        
+        // Reload the favorite shops after following
+        await this.getFavoriteShops(userId);
+      } catch (error) {
+        console.error('Error following shop:', error);
+        alert('There was an error while trying to follow the shop.');
+      }
+    } else {
+      console.warn('User is not logged in or shop ID is missing');
+      alert('Please log in to follow the shop');
+    }
+  }
+  
+  async unfollowShop(): Promise<void> {
+    const user = JSON.parse(localStorage.getItem('user')!);
+    const userId = user?.id;
+  
+    if (userId && this.shop?.id) {
+      try {
+        // Call removeFavoriteShop API to unfollow the shop
+        const shopid: number = this.shop?.id;
+        await this.utilisateurService.removeFavoriteShop(userId, shopid).toPromise();
+        console.log('Shop unfollowed successfully');
+        alert('Shop has been removed from your favorites!');
+        
+        // Reload the favorite shops after unfollowing
+        await this.getFavoriteShops(userId);
+      } catch (error) {
+        console.error('Error unfollowing shop:', error);
+        alert('There was an error while trying to unfollow the shop.');
+      }
+    } else {
+      console.warn('User is not logged in or shop ID is missing');
+      alert('Please log in to unfollow the shop');
+    }
+  }
+
+  isShopInFavorites(): boolean {
+    // Return true if the shop is in the favoriteShops array, otherwise false
+    return this.favoriteShops.some(favoriteShop => favoriteShop.id === this.shop?.id);
+  }
+
+  checkIfProductInWishlist(produitId: number): boolean {
+
+    // Check if the product is already in the wishlist using the wishlists array
+    return this.wishlists.some(wishlist => wishlist.produit.id === produitId);
+  }
+
+  async addToWishlist(produitId : number): Promise<void> {
+    const user = JSON.parse(localStorage.getItem('user')!);
+    const userId = user?.id;
+  
+    if (userId && produitId) {
+      try {
+        // Call the addToWishlist API to add the product to the user's wishlist
+        const productId: number = produitId
+        await this.wishlistService.addToWishlist(userId, productId).toPromise();
+        console.log('Product added to wishlist successfully');
+        alert('Product has been added to your wishlist!');
+  
+        await this.getUserWishlist(userId);
+      } catch (error) {
+        console.error('Error adding product to wishlist:', error);
+        alert('There was an error while trying to add the product to your wishlist.');
+      }
+    } else {
+      console.warn('User is not logged in or product ID is missing');
+      alert('Please log in to add the product to your wishlist');
+    }
+  }
+
+  async removeFromWishlist(produitId : number): Promise<void> {
+    const user = JSON.parse(localStorage.getItem('user')!);
+    const userId = user?.id;
+  
+    if (userId && produitId) {
+      try {
+        // Assuming you have the wishlistId, you can call removeFromWishlist
+        const wishlist = this.wishlists.find(w => w.produit.id === produitId);
+        if (wishlist) {
+          const wishlistId = wishlist.id;
+          await this.wishlistService.removeFromWishlist(wishlistId).toPromise();
+          console.log('Product removed from wishlist successfully');
+          alert('Product has been removed from your wishlist!');
+  
+          await this.getUserWishlist(userId);
+        } else {
+          alert('Product not found in your wishlist');
+        }
+      } catch (error) {
+        console.error('Error removing product from wishlist:', error);
+        alert('There was an error while trying to remove the product from your wishlist.');
+      }
+    } else {
+      console.warn('User is not logged in or product ID is missing');
+      alert('Please log in to remove the product from your wishlist');
+    }
   }
 }

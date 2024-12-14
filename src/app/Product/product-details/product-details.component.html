@@ -114,7 +114,7 @@
   <!-- More from this shop -->
   <div class="mt-8">
     <div class="flex justify-between items-center mb-4">
-      <h2 class="text-2xl font-bold text-gray-800">More from this shop</h2>
+      <h2 class="text-2xl font-bold text-gray-800">More from this  <a href="Shop/{{shopContainingProduit?.id}}" class="text-[#59D6CE]">shop</a></h2>
     </div>
     <div class="grid grid-cols-1 md:grid-cols-5 gap-4">
       <div *ngFor="let produit of this.shopContainingProduit?.produits" class="bg-white shadow-lg rounded-lg p-4">

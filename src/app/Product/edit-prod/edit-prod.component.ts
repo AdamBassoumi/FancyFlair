@@ -134,12 +134,12 @@ ngOnInit(): void {
     console.log('Produit to add:', newProduit);
   
     // Save the product using ProduitService
-    this.produitService.createProduit(newProduit, +shopId, category.id).subscribe(
+    this.produitService.updateProduit(+this.ItemId,newProduit).subscribe(
       (produit) => {
-        console.log('Produit successfully added:', produit);
+        console.log('Produit successfully updated:', produit);
       },
       (error) => {
-        console.error('Error adding produit:', error);
+        console.error('Error updating produit:', error);
       }
     );
   

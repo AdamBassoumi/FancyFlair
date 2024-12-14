@@ -18,7 +18,6 @@ import { UserShopComponent } from './Shop/user-shop/user-shop.component';
 import { AddProductComponent } from './Product/add-product/add-product.component';
 import { StepsIndicatorComponent } from './Shop/steps-indicator/steps-indicator.component';
 import { WishlistPopupComponent } from './wishlist-popup/wishlist-popup.component';
-import { FollowedShopsDropdownComponent } from './followed-shops-dropdown/followed-shops-dropdown.component';
 import { RegisterComponent } from './register/register.component';
 import { EditProdComponent } from './Product/edit-prod/edit-prod.component';
 import { VisitShopComponent } from './Shop/visit-shop/visit-shop.component';
@@ -40,7 +39,6 @@ import { VisitShopComponent } from './Shop/visit-shop/visit-shop.component';
     AddProductComponent,
     StepsIndicatorComponent,
     WishlistPopupComponent,
-    FollowedShopsDropdownComponent,
     RegisterComponent,
     EditProdComponent,
     VisitShopComponent,
