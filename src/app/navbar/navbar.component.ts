@@ -16,6 +16,8 @@ export class NavbarComponent implements OnInit {
   showWishlist: boolean = false;
   favoriteShops: Shop[] = [];
 
+  user : any;
+
   toggleWishlist() {
     this.showWishlist = !this.showWishlist;
   }
@@ -36,14 +38,15 @@ export class NavbarComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.user = JSON.parse(localStorage.getItem('user') || '{}');
     this.loadUtilisateur();
     this.loadFavoriteShops();
   }
 
   loadFavoriteShops(): void {
-    const user = JSON.parse(localStorage.getItem('user') || '{}');
-    if (user && user.id) {
-      this.utilisateurService.getFavoriteShops(user.id).subscribe(
+    
+    if (this.user && this.user.id) {
+      this.utilisateurService.getFavoriteShops(this.user.id).subscribe(
         (shops: Shop[]) => {
           this.favoriteShops = shops;
           console.log('Favorite shops:', this.favoriteShops);
@@ -57,10 +60,8 @@ export class NavbarComponent implements OnInit {
 
 
   loadUtilisateur(): void {
-    // Assuming user information is available in localStorage
-    const user = JSON.parse(localStorage.getItem('user') || '{}');
-    if (user && user.id) {
-      this.utilisateurService.getUtilisateurById(user.id).subscribe(
+    if (this.user && this.user.id) {
+      this.utilisateurService.getUtilisateurById(this.user.id).subscribe(
         utilisateur => {
           this.utilisateur = utilisateur;
           console.log('Utilisateur:', this.utilisateur); // Logging utilisateur

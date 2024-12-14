@@ -171,20 +171,17 @@ export class ProductDetailsComponent implements OnInit {
   }
 
   async followShop(): Promise<void> {
-    // Get the user ID from local storage
-    const user = JSON.parse(localStorage.getItem('user')!);
-    const userId = user?.id;
   
-    if (userId && this.shopContainingProduit?.id) {
+    if (this.userId && this.shopContainingProduit?.id) {
       try {
         // Call addFavoriteShop API to follow the shop
         const shopid: number = this.shopContainingProduit?.id;
-        await this.utilisateurService.addFavoriteShop(userId, shopid).toPromise();
+        await this.utilisateurService.addFavoriteShop(this.userId, shopid).toPromise();
         console.log('Shop followed successfully');
         alert('Shop has been added to your favorites!');
         
         // Reload the favorite shops after following
-        await this.getFavoriteShops(userId);
+        await this.getFavoriteShops(this.userId);
       } catch (error) {
         console.error('Error following shop:', error);
         alert('There was an error while trying to follow the shop.');
@@ -196,19 +193,17 @@ export class ProductDetailsComponent implements OnInit {
   }
   
   async unfollowShop(): Promise<void> {
-    const user = JSON.parse(localStorage.getItem('user')!);
-    const userId = user?.id;
   
-    if (userId && this.shopContainingProduit?.id) {
+    if (this.userId && this.shopContainingProduit?.id) {
       try {
         // Call removeFavoriteShop API to unfollow the shop
         const shopid: number = this.shopContainingProduit?.id;
-        await this.utilisateurService.removeFavoriteShop(userId, shopid).toPromise();
+        await this.utilisateurService.removeFavoriteShop(this.userId, shopid).toPromise();
         console.log('Shop unfollowed successfully');
         alert('Shop has been removed from your favorites!');
         
         // Reload the favorite shops after unfollowing
-        await this.getFavoriteShops(userId);
+        await this.getFavoriteShops(this.userId);
       } catch (error) {
         console.error('Error unfollowing shop:', error);
         alert('There was an error while trying to unfollow the shop.');
@@ -231,18 +226,16 @@ export class ProductDetailsComponent implements OnInit {
   }
 
   async addToWishlist(): Promise<void> {
-    const user = JSON.parse(localStorage.getItem('user')!);
-    const userId = user?.id;
   
-    if (userId && this.produit?.id) {
+    if (this.userId && this.produit?.id) {
       try {
         // Call the addToWishlist API to add the product to the user's wishlist
         const productId: number = this.produit?.id;
-        await this.wishlistService.addToWishlist(userId, productId).toPromise();
+        await this.wishlistService.addToWishlist(this.userId, productId).toPromise();
         console.log('Product added to wishlist successfully');
         alert('Product has been added to your wishlist!');
   
-        await this.getUserWishlist(userId);
+        await this.getUserWishlist(this.userId);
       } catch (error) {
         console.error('Error adding product to wishlist:', error);
         alert('There was an error while trying to add the product to your wishlist.');
@@ -254,10 +247,8 @@ export class ProductDetailsComponent implements OnInit {
   }
 
   async removeFromWishlist(): Promise<void> {
-    const user = JSON.parse(localStorage.getItem('user')!);
-    const userId = user?.id;
   
-    if (userId && this.produit?.id) {
+    if (this.userId && this.produit?.id) {
       try {
         // Assuming you have the wishlistId, you can call removeFromWishlist
         const wishlist = this.wishlists.find(w => w.produit.id === this.produit?.id);
@@ -267,7 +258,7 @@ export class ProductDetailsComponent implements OnInit {
           console.log('Product removed from wishlist successfully');
           alert('Product has been removed from your wishlist!');
   
-          await this.getUserWishlist(userId);
+          await this.getUserWishlist(this.userId);
         } else {
           alert('Product not found in your wishlist');
         }
