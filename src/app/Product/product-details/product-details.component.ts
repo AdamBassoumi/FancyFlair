@@ -125,7 +125,7 @@ export class ProductDetailsComponent implements OnInit {
     if (this.produit?.fichier) {
       const link = document.createElement('a');
       link.href = this.produit.fichier;
-      link.download = 'product-image'; // Set default file name
+      link.download = this.produit.name; // Set default file name
       link.click();
     } else {
       console.error('Image not available for download.');
