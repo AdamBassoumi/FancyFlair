@@ -6,7 +6,7 @@ import { Category } from '../../models/Category';
 import { Produit } from '../../models/Produit';
 import { HttpClient } from '@angular/common/http';
 import { Shop } from 'src/app/models/Shop';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ShopService } from 'src/app/services/Shop/shop.service';
 
 @Component({
@@ -38,6 +38,7 @@ export class EditProdComponent implements OnInit {
     private shopService: ShopService,
     private http: HttpClient,
     private route: ActivatedRoute,
+    private router: Router, // Inject Router for navigation
   ) {}
 
 ngOnInit(): void {
@@ -137,6 +138,7 @@ ngOnInit(): void {
     this.produitService.updateProduit(+this.ItemId,newProduit).subscribe(
       (produit) => {
         console.log('Produit successfully updated:', produit);
+        this.router.navigate(['/MyShop']);
       },
       (error) => {
         console.error('Error updating produit:', error);

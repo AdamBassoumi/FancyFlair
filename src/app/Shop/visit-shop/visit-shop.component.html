@@ -57,7 +57,7 @@
                       title="view product">
                     <i class="fa-solid fa-magnifying-glass"></i>
                   </a>
-                  <button (click)="addToWishlist(produit.id)"
+                  <button *ngIf="!checkIfProductInWishlist(produit.id) && this.user" (click)="addToWishlist(produit.id)"
                       class="text-white text-lg w-9 h-8 rounded-full bg-primary flex items-center justify-center hover:bg-gray-800 transition"
                       title="add to wishlist">
                     <i class="fa-solid fa-heart"></i>
