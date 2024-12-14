@@ -28,7 +28,7 @@ export class EditProdComponent implements OnInit {
 
 
     ItemId: number | any;
-    produit?: Produit;
+    produit?: any;
     shops?: Shop[];
     shopContainingProduit?: Shop;
 
@@ -128,10 +128,7 @@ ngOnInit(): void {
       description: formData['additional-description'],
       prix: parseFloat(price),
       fichier: this.selectedFile ? 'assets/produits/' + this.selectedFile.name : '',
-      dateCreation: new Date().toString(),
-      stock: 0, // Set default stock value
       category: category,
-      commentaires: [] // No comments initially
     };
   
     console.log('Produit to add:', newProduit);

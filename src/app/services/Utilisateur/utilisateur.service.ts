@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { Shop } from 'src/app/models/Shop';
 import { Utilisateur } from 'src/app/models/Utilisateur';
 
 @Injectable({
@@ -45,5 +46,9 @@ export class UtilisateurService {
   validateUserCredentials(email: string, mdp: string): Observable<Utilisateur> {
     const credentials = { email, mdp };
     return this.http.post<Utilisateur>(`${this.apiUrl}/validate`, credentials);
+  }
+
+  getFavoriteShops(userId: number): Observable<Shop[]> {
+    return this.http.get<Shop[]>(`${this.apiUrl}/${userId}/favorites`);
   }
 }

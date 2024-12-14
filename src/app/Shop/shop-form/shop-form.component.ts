@@ -47,7 +47,7 @@ export class ShopFormComponent {
     if (userId) {
       // Create a new shop object
       const newShop: any = {
-        nom: this.shopData.shopName,
+        name: this.shopData.shopName,
         description: this.shopData.shopDescription,
         dateCreation: new Date().toString(),
       };

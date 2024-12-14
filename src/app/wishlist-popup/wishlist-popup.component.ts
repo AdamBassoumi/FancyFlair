@@ -1,8 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { Observable } from 'rxjs';
 import { Wishlist } from '../models/Wishlist';
-import { UtilisateurService } from '../services/Utilisateur/utilisateur.service';
 import { WishlistService } from '../services/Wishlist/wishlist-service.service';
+import { Produit } from '../models/Produit';
 
 @Component({
   selector: 'app-wishlist-popup',
@@ -12,14 +11,14 @@ import { WishlistService } from '../services/Wishlist/wishlist-service.service';
 export class WishlistPopupComponent implements OnInit {
   @Input() isVisible: boolean = false;
   
-  wishlistItems: Wishlist[] = []; // This will hold the wishlist items fetched from the API
+  wishlists: Wishlist[] = [];
 
   constructor(private wishListService : WishlistService) {}
 
   ngOnInit(): void {
     const userId = this.getUserIdFromLocalStorage();
     if (userId) {
-      this.loadWishlist(userId);
+      this.getUserWishlist(userId);
     }
   }
 
@@ -33,14 +32,14 @@ export class WishlistPopupComponent implements OnInit {
     return null;
   }
 
-  // Method to fetch wishlist from the API
-  loadWishlist(userId: number): void {
+  getUserWishlist(userId: number): void {
     this.wishListService.getUserWishlist(userId).subscribe(
-      (wishlist: Wishlist[]) => {
-        this.wishlistItems = wishlist;
+      (wishlists: Wishlist[]) => {
+        this.wishlists = wishlists;
+        console.log('User wishlists:', this.wishlists);
       },
       (error) => {
-        console.error('Error fetching wishlist:', error);
+        console.error('Error fetching user wishlists:', error);
       }
     );
   }
@@ -50,8 +49,31 @@ export class WishlistPopupComponent implements OnInit {
     this.isVisible = false;
   }
 
-  // Method to remove an item from the wishlist
-  removeFromWishlist(id: number) {
-    this.wishlistItems = this.wishlistItems.filter(item => item.id !== id);
+  async removeWishlist(produit: Produit): Promise<void> {
+    const user = JSON.parse(localStorage.getItem('user')!);
+    const userId = user?.id;
+  
+    if (userId && produit?.id) {
+      try {
+        // Assuming you have the wishlistId, you can call removeFromWishlist
+        const wishlist = this.wishlists.find(w => w.produit.id === produit?.id);
+        if (wishlist) {
+          const wishlistId = wishlist.id;
+          await this.wishListService.removeFromWishlist(wishlistId).toPromise();
+          console.log('Product removed from wishlist successfully');
+          alert('Product has been removed from your wishlist!');
+  
+          await this.getUserWishlist(userId);
+        } else {
+          alert('Product not found in your wishlist');
+        }
+      } catch (error) {
+        console.error('Error removing product from wishlist:', error);
+        alert('There was an error while trying to remove the product from your wishlist.');
+      }
+    } else {
+      console.warn('User is not logged in or product ID is missing');
+      alert('Please log in to remove the product from your wishlist');
+    }
   }
 }

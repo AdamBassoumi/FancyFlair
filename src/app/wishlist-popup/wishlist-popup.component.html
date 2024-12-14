@@ -10,10 +10,10 @@
     </button>
     <h2 class="text-2xl text-red-700 mb-6">My Wishlist</h2> 
     
-    <div *ngIf="wishlistItems.length > 0; else noItems">
+    <div *ngIf="wishlists.length > 0; else noItems">
       <ul class="space-y-4">
         <li
-          *ngFor="let item of wishlistItems"
+          *ngFor="let item of wishlists"
           class="flex items-center justify-between p-4 bg-gray-100 rounded-lg shadow-sm"
         >
           <div>
@@ -23,7 +23,7 @@
           </div>
           <button
             class="text-red-500 hover:text-red-700"
-            (click)="removeFromWishlist(item.id)"
+            (click)="removeWishlist(item.produit)"
           >
             Remove
           </button>

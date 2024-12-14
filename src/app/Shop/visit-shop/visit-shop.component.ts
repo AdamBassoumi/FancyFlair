@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Category } from 'src/app/models/Category';
-import { Produit } from 'src/app/models/Produit';
-import { Shop } from 'src/app/models/Shop'; // Ensure you have the Shop model imported
+import { Shop } from 'src/app/models/Shop';
 import { CategoryService } from 'src/app/services/Category/category.service';
 import { ShopService } from 'src/app/services/Shop/shop.service';
+import { UtilisateurService } from 'src/app/services/Utilisateur/utilisateur.service';
 
 @Component({
   selector: 'app-visit-shop',
@@ -14,43 +14,77 @@ import { ShopService } from 'src/app/services/Shop/shop.service';
 export class VisitShopComponent implements OnInit {
   
   categories?: Category[];
-  selectedCategoryIds: number[] = []; // Array to hold selected categories
-  selectedSortingOption: string = ''; // Property to store selected sorting option
+  selectedCategoryIds: number[] = [];
+  selectedSortingOption: string = '';
   shopId?: number;
-  shop?: Shop; // Add a property to hold the shop details
+  shop?: Shop;
+  utilisateur: any; // To hold the user data
 
   constructor(
     private shopService: ShopService,
     private categoryService: CategoryService,
-    private router: Router,
     private route: ActivatedRoute,
+    private utilisateurService: UtilisateurService, // Inject the utilisateur service
+    private router: Router // Inject Router for navigation
   ) {}
 
   ngOnInit(): void {
+    this.loadUtilisateur(); // Load utilisateur data first
     this.loadCategories();
-  
-    // Subscribe to route parameters
-    this.route.paramMap.subscribe(params => {
-      // Retrieve the 'sid' parameter from the URL (shop ID)
-      this.shopId = +params.get('sid')!; // Get the parameter and convert to number
-    
-      console.log('Shop ID from route:', this.shopId);
-      
-      if (this.shopId) {
-        // Fetch shop details by calling getShopById API method
-        this.shopService.getShopById(this.shopId).subscribe(
-          (shop) => {
-            this.shop = shop; // Store the shop details
-            console.log('Shop Details:', this.shop);
-          },
-          (error) => {
-            console.error('Error loading shop details', error);
+  }
+
+  loadUtilisateur(): void {
+    // Assuming user information is available in localStorage
+    const user = JSON.parse(localStorage.getItem('user') || '{}');
+    if (user && user.id) {
+      this.utilisateurService.getUtilisateurById(user.id).subscribe(
+        utilisateur => {
+          this.utilisateur = utilisateur;
+          console.log('Utilisateur:', this.utilisateur); // Logging utilisateur
+
+          // Handle shop localStorage
+          if (this.utilisateur?.shop) {
+            localStorage.setItem('shop', this.utilisateur.shop.id.toString());
+          } else {
+            localStorage.removeItem('shop');
           }
-        );
-      } else {
-        console.warn('No shop ID found in route');
-      }
-    });
+
+          // After utilisateur data is loaded, check shop ID and route
+          this.route.paramMap.subscribe(params => {
+            this.shopId = +params.get('sid')!; // Retrieve and convert the shop ID from the URL
+            console.log('Shop ID from route:', this.shopId);
+            console.log('Shop ID from user:', this.utilisateur?.shop?.id);
+            
+            if (this.shopId) {
+              // Check if the current shopId matches the user's shop ID
+              if (this.utilisateur?.shop?.id === this.shopId) {
+                // If it matches, redirect to /MyShop
+                this.router.navigate(['/MyShop']);
+              } else {
+                // Fetch the shop details if it doesn't match
+                this.shopService.getShopById(this.shopId).subscribe(
+                  (shop) => {
+                    this.shop = shop; // Store the shop details
+                    console.log('Shop Details:', this.shop);
+                  },
+                  (error) => {
+                    console.error('Error loading shop details', error);
+                  }
+                );
+              }
+            } else {
+              console.warn('No shop ID found in route');
+            }
+          });
+
+        },
+        error => {
+          console.error('Error loading utilisateur', error);
+        }
+      );
+    } else {
+      localStorage.removeItem('shop'); // Remove shop key if no user
+    }
   }
 
   loadCategories(): void {

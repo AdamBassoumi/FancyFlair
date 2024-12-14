@@ -4,6 +4,7 @@ import { ProduitService } from '../services/Produit/produit.service';
 import { Produit } from '../models/Produit';
 import { UtilisateurService } from '../services/Utilisateur/utilisateur.service';
 import { Utilisateur } from '../models/Utilisateur';
+import { Shop } from '../models/Shop';
 
 @Component({
   selector: 'app-navbar',
@@ -11,13 +12,13 @@ import { Utilisateur } from '../models/Utilisateur';
   styleUrls: ['./navbar.component.css']
 })
 export class NavbarComponent implements OnInit {
-   title = 'Angular';
+
   showWishlist: boolean = false;
+  favoriteShops: Shop[] = [];
 
   toggleWishlist() {
     this.showWishlist = !this.showWishlist;
   }
-  followedShops = ['Shop 1', 'Shop 2', 'Shop 3', 'Shop 4', 'Shop 5'];
   dropdownOpen: boolean = false;
 
   toggleDropdown() {
@@ -36,6 +37,22 @@ export class NavbarComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadUtilisateur();
+    this.loadFavoriteShops();
+  }
+
+  loadFavoriteShops(): void {
+    const user = JSON.parse(localStorage.getItem('user') || '{}');
+    if (user && user.id) {
+      this.utilisateurService.getFavoriteShops(user.id).subscribe(
+        (shops: Shop[]) => {
+          this.favoriteShops = shops;
+          console.log('Favorite shops:', this.favoriteShops);
+        },
+        (error) => {
+          console.error('Error fetching favorite shops:', error);
+        }
+      );
+    }
   }
 
 

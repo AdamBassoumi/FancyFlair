@@ -47,10 +47,10 @@
             class="absolute mt-2 bg-white border border-gray-200 rounded-lg shadow w-48 max-h-60 overflow-y-auto"
           >
             <li
-              *ngFor="let shop of followedShops"
+              *ngFor="let shop of favoriteShops"
               class="px-4 py-2 hover:bg-gray-100 cursor-pointer text-gray-700"
             >
-              {{ shop }}
+              {{ shop.name }}
             </li>
           </ul>
         </div>
