@@ -21,11 +21,15 @@ export class ProductDetailsComponent implements OnInit {
   ItemId: number | any;
   produit?: Produit;
 
+  userId:number = 1
+
   shopContainingProduit?: Shop;
   favoriteShops: Shop[] = [];
   wishlists: Wishlist[] = [];
 
   commentText: string = '';
+  rating: number = 5; // Default rating for new comments
+  showForm: boolean = false; // Flag to control the visibility of the form
 
   constructor(
     private route: ActivatedRoute,
@@ -45,6 +49,11 @@ export class ProductDetailsComponent implements OnInit {
         this.produit = produit;
         console.log('Produit:', this.produit);
 
+        // If product exists, check for comments
+        if (this.produit?.commentaires === undefined) {
+          this.produit.commentaires = []; // Ensure it's initialized as an empty array
+        }
+
         if (this.produit?.shop?.id) {
           // Fetch the shop using the shop ID from the product
           this.shopService.getShopById(this.produit.shop.id).subscribe(shop => {
@@ -59,12 +68,12 @@ export class ProductDetailsComponent implements OnInit {
 
     // Get user ID from local storage
     const user = JSON.parse(localStorage.getItem('user')!);
-    const userId = user?.id;
+    this.userId = user?.id;
 
-    if (userId) {
+    if (this.userId) {
       // Fetch the user's favorite shops when the component initializes
-      this.getFavoriteShops(userId);
-      this.getUserWishlist(userId);
+      this.getFavoriteShops(this.userId);
+      this.getUserWishlist(this.userId);
     } else {
       console.warn('User not logged in');
     }
@@ -97,16 +106,17 @@ export class ProductDetailsComponent implements OnInit {
   onSubmit(): void {
     if (this.commentText.trim()) {
       const commentaire: any = {
-        uname: 'User Name', // Replace with the actual user name
         text: this.commentText,
         date: new Date().toDateString(),
-        note: 5 
+        note: this.rating
       };
-      this.commService.createCommentaire(commentaire, 1, this.ItemId) // Replace '1' with the actual user ID
+
+      this.commService.createCommentaire(commentaire, this.userId, this.ItemId) // Replace '1' with the actual user ID
         .subscribe(
           response => {
             console.log('Commentaire created:', response);
             this.commentText = '';
+            this.rating = 5; // Reset the rating to 5 for new comments
             this.produitService.getProduitById(this.ItemId).subscribe(
               (produit: Produit) => {
                 this.produit = produit;
@@ -119,6 +129,29 @@ export class ProductDetailsComponent implements OnInit {
           }
         );
     }
+  }
+
+  calculateAverageRating(): number {
+    if (!this.produit?.commentaires || this.produit.commentaires.length === 0) {
+      return 0; // Return 0 if no comments exist
+    }
+
+    const total = this.produit.commentaires.reduce((sum, com) => sum + com.note, 0);
+    return Math.round((total / this.produit.commentaires.length) * 10) / 10; // Round to 1 decimal
+  }
+
+  generateStars(note: number): any[] {
+    return new Array(note).fill(1); // Create an array of "1"s to represent stars
+  }
+
+  toggleForm(): void {
+    this.showForm = !this.showForm;
+  }
+
+  cancelForm(): void {
+    this.showForm = false;
+    this.commentText = ''; // Clear the comment text
+    this.rating = 5; // Reset rating to 5
   }
 
   downloadImage(): void {

@@ -3,7 +3,7 @@ import { Utilisateur } from "./Utilisateur";
 
 export interface Shop {
     id: number;
-    name: string;
+    nom: string;
     description: string;
     dateCreation: string;
     utilisateur: Utilisateur;
