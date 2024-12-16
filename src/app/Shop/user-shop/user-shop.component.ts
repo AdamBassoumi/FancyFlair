@@ -22,7 +22,16 @@ export class UserShopComponent {
     private categoryService: CategoryService,
     private router: Router // Inject Router for redirection
   ) {}
+  isEditMode: boolean = false;
+  showRelatedProduct: boolean = true;
 
+  toggleEditMode() {
+    this.isEditMode = !this.isEditMode;
+  }
+
+  hideRelatedProduct() {
+    this.showRelatedProduct = false; // Hide the "Related Product" when the delete button is clicked
+  }
   ngOnInit(): void {
     // Check if 'shop' is present in localStorage
     const shopId = localStorage.getItem('shop');

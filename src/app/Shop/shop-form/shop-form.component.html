@@ -1,5 +1,5 @@
 <app-navbar></app-navbar>
-<img src="assets/create.png" alt="Background Image" class="absolute mt w-full h-full object-cover z-negative" />
+<img src="assets/shopbg.jpg" alt="Background Image" class="absolute mt w-full h-full object-cover z-negative" />
 <div class="relative min-h-screen">
 
   
@@ -34,7 +34,6 @@
           ></textarea>
         </div>
         <button
-          type="button"
           (click)="nextStep()"
           class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600"
         >
@@ -55,14 +54,14 @@
           />
         </div>
         <button
-          type="button"
+    
           (click)="prevStep()"
-          class="bg-gray-500 text-white px-4 py-2 rounded-md hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-500"
+          class="bg-gray-500 text-white px-4 py-2 mr-4 rounded-md hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-500"
         >
           Back
         </button>
         <button
-          type="button"
+    
           (click)="nextStep()"
           class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
         >
@@ -78,9 +77,9 @@
           <p><strong>Shop Address:</strong> {{ shopData.shopAddress }}</p>
         </div>
         <button
-          type="button"
+       
           (click)="prevStep()"
-          class="bg-gray-500 text-white px-4 py-2 rounded-md hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-500"
+          class="bg-gray-500 text-white px-4 mr-4 py-2 rounded-md hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-500"
         >
           Back
         </button>
