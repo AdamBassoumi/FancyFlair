@@ -4,6 +4,7 @@ import { Category } from '../../models/Category';
 import { ShopService } from '../../services/Shop/shop.service';
 import { CategoryService } from '../../services/Category/category.service';
 import { Router } from '@angular/router';
+import { ProduitService } from 'src/app/services/Produit/produit.service';
 
 @Component({
   selector: 'app-user-shop',
@@ -17,21 +18,16 @@ export class UserShopComponent {
   selectedCategoryIds: number[] = []; // Array to hold selected categories
   selectedSortingOption: string = ''; // Property to store selected sorting option
 
-  constructor(
-    private shopService: ShopService,
-    private categoryService: CategoryService,
-    private router: Router // Inject Router for redirection
-  ) {}
   isEditMode: boolean = false;
   showRelatedProduct: boolean = true;
 
-  toggleEditMode() {
-    this.isEditMode = !this.isEditMode;
-  }
+  constructor(
+    private shopService: ShopService,
+    private categoryService: CategoryService,
+    private produitService: ProduitService,
+    private router: Router // Inject Router for redirection
+  ) {}
 
-  hideRelatedProduct() {
-    this.showRelatedProduct = false; // Hide the "Related Product" when the delete button is clicked
-  }
   ngOnInit(): void {
     // Check if 'shop' is present in localStorage
     const shopId = localStorage.getItem('shop');
@@ -103,6 +99,27 @@ export class UserShopComponent {
   handleImageError(event: Event) {
     const target = event.target as HTMLImageElement;
     target.src = 'assets/bullet.png'; // Fallback image
+}
+
+
+toggleEditMode() {
+  this.isEditMode = !this.isEditMode;
+}
+
+hideRelatedProduct() {
+  this.showRelatedProduct = false;
+}
+
+deleteProduct(id: number): void {
+  this.produitService.deleteProduit(id).subscribe(
+    () => {
+      console.log(`Product with ID ${id} deleted successfully.`);
+      this.loadProductsFromShop(); // Reload products after deletion
+    },
+    (error) => {
+      console.error(`Error deleting product with ID ${id}`, error);
+    }
+  );
 }
 
 }
