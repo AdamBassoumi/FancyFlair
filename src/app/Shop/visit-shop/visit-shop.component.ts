@@ -36,19 +36,19 @@ export class VisitShopComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.loadUtilisateur(); // Load utilisateur data first
     this.loadCategories();
-
+    this.loadShop()
         // Get user ID from local storage
         this.user = JSON.parse(localStorage.getItem('user')!);
-    
         if (this.user.id) {
           // Fetch the user's favorite shops when the component initializes
           this.getFavoriteShops(this.user.id);
           this.getUserWishlist(this.user.id);
+          this.loadUtilisateur(); // Load utilisateur data first
         } else {
           console.warn('User not logged in');
         }
+    this.loadShop()
   }
 
     getFavoriteShops(userId: number): void {
@@ -75,55 +75,44 @@ export class VisitShopComponent implements OnInit {
       );
     }
 
+  loadShop():void{
+    this.route.paramMap.subscribe(params => {
+      this.shopId = +params.get('sid')!; // Retrieve and convert the shop ID from the URL
+      
+      if (this.shopId) {
+
+          // Fetch the shop details if it doesn't match
+          this.shopService.getShopById(this.shopId).subscribe(
+            (shop) => {
+              this.shop = shop; // Store the shop details
+              console.log('Shop Details:', this.shop);
+            },
+            (error) => {
+              console.error('Error loading shop details', error);
+            }
+          );
+        
+      } else {
+        console.warn('No shop ID found in route');
+      }
+    });
+  }
+
   loadUtilisateur(): void {
 
-    if (this.user && this.user.id) {
       this.utilisateurService.getUtilisateurById(this.user.id).subscribe(
         utilisateur => {
           this.utilisateur = utilisateur;
           console.log('Utilisateur:', this.utilisateur); // Logging utilisateur
-
-          // Handle shop localStorage
-          if (this.utilisateur?.shop) {
-            localStorage.setItem('shop', this.utilisateur.shop.id.toString());
-          } else {
-            localStorage.removeItem('shop');
+          if (this.utilisateur?.shop?.id === this.shopId) {
+            // If it matches, redirect to /MyShop
+            this.router.navigate(['/MyShop']);
           }
-
-          // After utilisateur data is loaded, check shop ID and route
-          this.route.paramMap.subscribe(params => {
-            this.shopId = +params.get('sid')!; // Retrieve and convert the shop ID from the URL
-            
-            if (this.shopId) {
-              // Check if the current shopId matches the user's shop ID
-              if (this.utilisateur?.shop?.id === this.shopId) {
-                // If it matches, redirect to /MyShop
-                this.router.navigate(['/MyShop']);
-              } else {
-                // Fetch the shop details if it doesn't match
-                this.shopService.getShopById(this.shopId).subscribe(
-                  (shop) => {
-                    this.shop = shop; // Store the shop details
-                    console.log('Shop Details:', this.shop);
-                  },
-                  (error) => {
-                    console.error('Error loading shop details', error);
-                  }
-                );
-              }
-            } else {
-              console.warn('No shop ID found in route');
-            }
-          });
-
         },
         error => {
           console.error('Error loading utilisateur', error);
         }
       );
-    } else {
-      localStorage.removeItem('shop'); // Remove shop key if no user
-    }
   }
 
   loadCategories(): void {
