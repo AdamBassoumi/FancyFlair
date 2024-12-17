@@ -1,0 +1,11 @@
+<div
+  *ngIf="isVisible"
+  class="fixed top-4 right-4 px-5 py-3 rounded shadow-lg transition-all duration-400"
+  [ngClass]="{
+    'bg-green-500 text-white': type === 'success',
+    'bg-red-500 text-white': type === 'error'
+  }"
+>
+  <p class="font-bold">{{ title }}</p>
+  <p>{{ message }}</p>
+</div>

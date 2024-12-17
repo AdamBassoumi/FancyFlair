@@ -5,6 +5,7 @@ import { Produit } from '../models/Produit';
 import { UtilisateurService } from '../services/Utilisateur/utilisateur.service';
 import { Utilisateur } from '../models/Utilisateur';
 import { Shop } from '../models/Shop';
+import { PopupService } from '../services/popup/popup.service';
 
 @Component({
   selector: 'app-navbar',
@@ -33,6 +34,7 @@ export class NavbarComponent implements OnInit {
 
   constructor(
     private produitService: ProduitService,
+    private popupService: PopupService,
     private utilisateurService: UtilisateurService,
     private router: Router
   ) {}
@@ -99,5 +101,13 @@ export class NavbarComponent implements OnInit {
     localStorage.removeItem('shop'); // Clear shop key on logout
     console.log('User logged out');
     this.router.navigate(['/']);
+  }
+  
+  triggerSuccess() {
+    this.popupService.showSuccess('Operation was successful!');
+  }
+
+  triggerError() {
+    this.popupService.showError('An error occurred. Please try again.');
   }
 }

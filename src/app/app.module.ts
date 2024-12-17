@@ -21,6 +21,7 @@ import { WishlistPopupComponent } from './wishlist-popup/wishlist-popup.componen
 import { RegisterComponent } from './register/register.component';
 import { EditProdComponent } from './Product/edit-prod/edit-prod.component';
 import { VisitShopComponent } from './Shop/visit-shop/visit-shop.component';
+import { PopupMessageComponent } from './popup-message/popup-message.component';
 
 
 @NgModule({
@@ -42,6 +43,7 @@ import { VisitShopComponent } from './Shop/visit-shop/visit-shop.component';
     RegisterComponent,
     EditProdComponent,
     VisitShopComponent,
+    PopupMessageComponent,
   ],
   imports: [
     BrowserModule,
@@ -50,6 +52,7 @@ import { VisitShopComponent } from './Shop/visit-shop/visit-shop.component';
     FormsModule,
     AppRoutingModule,
   ],
+  exports: [PopupMessageComponent],
   providers: [],
   bootstrap: [AppComponent]
 })
