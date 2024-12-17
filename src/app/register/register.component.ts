@@ -27,6 +27,11 @@ export class RegisterComponent {
     const lastname = (document.getElementById('lastname') as HTMLInputElement).value;
     const email = (document.getElementById('email') as HTMLInputElement).value;
     const password = (document.getElementById('password') as HTMLInputElement).value;
+
+    if (!name || !lastname || !email || !password) {
+      this.popupService.showError('All fields are required');
+      return;
+    }
   
     // Create the user object
     const newUser: Utilisateur = {
