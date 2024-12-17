@@ -8,6 +8,7 @@ import { HttpClient } from '@angular/common/http';
 import { Shop } from 'src/app/models/Shop';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ShopService } from 'src/app/services/Shop/shop.service';
+import { PopupService } from 'src/app/services/popup/popup.service';
 
 @Component({
   selector: 'app-edit-prod',
@@ -39,6 +40,7 @@ export class EditProdComponent implements OnInit {
     private http: HttpClient,
     private route: ActivatedRoute,
     private router: Router, // Inject Router for navigation
+    private popupService: PopupService,
   ) {}
 
 ngOnInit(): void {
@@ -70,6 +72,7 @@ ngOnInit(): void {
       });
     } else {
       console.warn('Invalid or missing product ID in the route');
+      this.popupService.showError('Invalid or missing product ID in the route');
     }
   });
 }
@@ -107,7 +110,7 @@ ngOnInit(): void {
     }
   
     if (!category) {
-      alert('Category is required');
+      this.popupService.showError('Category is required');
       return;
     }
   
@@ -115,12 +118,12 @@ ngOnInit(): void {
     const price = formData['product-price'];
   
     if (!name) {
-      alert('Product name is required');
+     this.popupService.showError('Product name is required');
       return;
     }
   
     if (!price || isNaN(price) || price <= 0) {
-      alert('Product price is required and must be a positive number');
+      this.popupService.showError('Invalid product price');
       return;
     }
   
@@ -138,6 +141,7 @@ ngOnInit(): void {
     this.produitService.updateProduit(+this.ItemId,newProduit).subscribe(
       (produit) => {
         console.log('Produit successfully updated:', produit);
+        this.popupService.showSuccess('Product updated successfully');
         this.router.navigate(['/MyShop']);
       },
       (error) => {
@@ -153,13 +157,16 @@ ngOnInit(): void {
       this.http.post('http://localhost:5000/upload', uploadFormData).subscribe(
         response => {
           console.log('File uploaded successfully:', response);
+          this.popupService.showSuccess('File uploaded successfully');
         },
         error => {
           console.error('Error uploading file:', error);
+          this.popupService.showError('Error uploading file');
         }
       );
     } else {
       console.log('No file selected');
+      this.popupService.showError('No file selected');
     }
   }
   

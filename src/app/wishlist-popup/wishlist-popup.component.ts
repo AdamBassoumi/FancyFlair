@@ -2,6 +2,8 @@ import { Component, Input, OnInit } from '@angular/core';
 import { Wishlist } from '../models/Wishlist';
 import { WishlistService } from '../services/Wishlist/wishlist-service.service';
 import { Produit } from '../models/Produit';
+import { PopupService } from '../services/popup/popup.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-wishlist-popup',
@@ -13,7 +15,10 @@ export class WishlistPopupComponent implements OnInit {
   
   wishlists: Wishlist[] = [];
 
-  constructor(private wishListService : WishlistService) {}
+  constructor(private wishListService : WishlistService,
+              private popupService: PopupService,
+              private router : Router,
+  ) {}
 
   ngOnInit(): void {
     const userId = this.getUserIdFromLocalStorage();
@@ -60,20 +65,18 @@ export class WishlistPopupComponent implements OnInit {
         if (wishlist) {
           const wishlistId = wishlist.id;
           await this.wishListService.removeFromWishlist(wishlistId).toPromise();
-          console.log('Product removed from wishlist successfully');
-          alert('Product has been removed from your wishlist!');
+          this.popupService.showSuccess('Product has been removed from your wishlist!');
   
           await this.getUserWishlist(userId);
         } else {
-          alert('Product not found in your wishlist');
+          this.popupService.showError('Product not found in your wishlist.');
         }
       } catch (error) {
-        console.error('Error removing product from wishlist:', error);
-        alert('There was an error while trying to remove the product from your wishlist.');
+        this.popupService.showError('There was an error while trying to remove the product from your wishlist.');
       }
     } else {
-      console.warn('User is not logged in or product ID is missing');
-      alert('Please log in to remove the product from your wishlist');
+      this.popupService.showError('Please log in to remove the product from your wishlist.');
+      this.router.navigate(['/login']);
     }
   }
 }

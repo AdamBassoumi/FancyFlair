@@ -6,6 +6,7 @@ import { Observable } from 'rxjs';
 import { Utilisateur } from '../../models/Utilisateur';
 import { Router } from '@angular/router';
 import { StepsIndicatorComponent } from '../steps-indicator/steps-indicator.component';
+import { PopupService } from 'src/app/services/popup/popup.service';
 
 @Component({
   selector: 'app-shop-form',
@@ -21,7 +22,8 @@ export class ShopFormComponent {
   };
 
   constructor(private shopService: ShopService,
-              private router: Router
+              private router: Router,
+              private popupService: PopupService,
   ) {}
 
   nextStep() {
@@ -55,11 +57,13 @@ export class ShopFormComponent {
       this.shopService.createShop(newShop, userId).subscribe(
         (shop) => {
           console.log('Shop successfully created:', shop);
+          this.popupService.showSuccess('Shop created successfully');
           this.router.navigate(['/MyShop']);
           // Handle success, e.g., redirect or show a message
         },
         (error) => {
           console.error('Error creating shop:', error);
+          this.popupService.showError('Error creating shop');
           // Handle error, e.g., show an error message
         }
       );

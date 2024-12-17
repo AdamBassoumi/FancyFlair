@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { Utilisateur } from '../models/Utilisateur';
 import { UtilisateurService } from '../services/Utilisateur/utilisateur.service';
 import { Router } from '@angular/router';
+import { PopupService } from '../services/popup/popup.service';
 
 @Component({
   selector: 'app-login',
@@ -12,7 +13,8 @@ export class LoginComponent {
   utilisateurs?: Utilisateur[];
 
   constructor(private utilisateurService: UtilisateurService,
-              private router: Router
+              private router: Router,
+              private popupService: PopupService,
   ) {}
 
   ngOnInit(): void {
@@ -27,6 +29,7 @@ export class LoginComponent {
       next: (user: Utilisateur) => {
         if (user) {
           console.log('User authenticated:', user);
+          this.triggerSuccess('Welcome back  '+user.nom);
           // Store user information in localStorage
           localStorage.setItem('user', JSON.stringify({ id: user.id, email: user.email }));
           this.router.navigate(['/']);
@@ -35,9 +38,18 @@ export class LoginComponent {
         }
       },
       error: (err) => {
+        this.triggerError('Invalid credentials');
         console.error('Error during authentication:', err);
       }
     });
+  }
+
+  triggerSuccess(message: string) {
+    this.popupService.showSuccess(message);
+  }
+
+  triggerError(message: string) {
+    this.popupService.showError(message);
   }
   
 }

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ProduitService } from '../../services/Produit/produit.service';
 import { Produit } from '../../models/Produit';
 import { ShopService } from '../../services/Shop/shop.service';
@@ -10,6 +10,7 @@ import { Commentaire } from '../../models/Commentaire';
 import { UtilisateurService } from 'src/app/services/Utilisateur/utilisateur.service';
 import { Wishlist } from 'src/app/models/Wishlist';
 import { WishlistService } from 'src/app/services/Wishlist/wishlist-service.service';
+import { PopupService } from 'src/app/services/popup/popup.service';
 
 @Component({
   selector: 'app-product-details',
@@ -33,11 +34,13 @@ export class ProductDetailsComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
+    private router: Router, // Inject Router for navigation
     private produitService: ProduitService,
     private shopService: ShopService,
     private commService: CommentaireService,
     private utilisateurService: UtilisateurService,
     private wishlistService: WishlistService,
+    private popupService: PopupService,
   ) {}
 
   ngOnInit(): void {
@@ -115,6 +118,7 @@ export class ProductDetailsComponent implements OnInit {
         .subscribe(
           response => {
             console.log('Commentaire created:', response);
+            this.popupService.showSuccess('Comment created successfully');
             this.commentText = '';
             this.rating = 5; // Reset the rating to 5 for new comments
             this.produitService.getProduitById(this.ItemId).subscribe(
@@ -160,8 +164,10 @@ export class ProductDetailsComponent implements OnInit {
       link.href = this.produit.fichier;
       link.download = this.produit.name; // Set default file name
       link.click();
+      this.popupService.showSuccess('Image downloaded successfully');
     } else {
       console.error('Image not available for download.');
+      this.popupService.showError('Image not available for download.');
     }
   }
 
@@ -178,17 +184,18 @@ export class ProductDetailsComponent implements OnInit {
         const shopid: number = this.shopContainingProduit?.id;
         await this.utilisateurService.addFavoriteShop(this.userId, shopid).toPromise();
         console.log('Shop followed successfully');
-        alert('Shop has been added to your favorites!');
+        this.popupService.showSuccess('Shop has been added to your favorites!');
         
         // Reload the favorite shops after following
         await this.getFavoriteShops(this.userId);
       } catch (error) {
         console.error('Error following shop:', error);
-        alert('There was an error while trying to follow the shop.');
+        this.popupService.showError('There was an error while trying to follow the shop.');
       }
     } else {
       console.warn('User is not logged in or shop ID is missing');
       alert('Please log in to follow the shop');
+      this.router.navigate(['/login']);
     }
   }
   
@@ -200,17 +207,18 @@ export class ProductDetailsComponent implements OnInit {
         const shopid: number = this.shopContainingProduit?.id;
         await this.utilisateurService.removeFavoriteShop(this.userId, shopid).toPromise();
         console.log('Shop unfollowed successfully');
-        alert('Shop has been removed from your favorites!');
+        this.popupService.showSuccess('Shop has been removed from your favorites!');
         
         // Reload the favorite shops after unfollowing
         await this.getFavoriteShops(this.userId);
       } catch (error) {
         console.error('Error unfollowing shop:', error);
-        alert('There was an error while trying to unfollow the shop.');
+        this.popupService.showError('There was an error while trying to unfollow the shop.');
       }
     } else {
       console.warn('User is not logged in or shop ID is missing');
-      alert('Please log in to unfollow the shop');
+      this.popupService.showError('Please log in to unfollow the shop.');
+      this.router.navigate(['/login']);
     }
   }
 
@@ -233,16 +241,16 @@ export class ProductDetailsComponent implements OnInit {
         const productId: number = this.produit?.id;
         await this.wishlistService.addToWishlist(this.userId, productId).toPromise();
         console.log('Product added to wishlist successfully');
-        alert('Product has been added to your wishlist!');
+        this.popupService.showSuccess('Product has been added to your wishlist!');
   
         await this.getUserWishlist(this.userId);
       } catch (error) {
         console.error('Error adding product to wishlist:', error);
-        alert('There was an error while trying to add the product to your wishlist.');
+        this.popupService.showError('There was an error while trying to add the product to your wishlist.');
       }
     } else {
       console.warn('User is not logged in or product ID is missing');
-      alert('Please log in to add the product to your wishlist');
+      this.popupService.showError('Please log in to add the product to your wishlist.');
     }
   }
 
@@ -256,19 +264,20 @@ export class ProductDetailsComponent implements OnInit {
           const wishlistId = wishlist.id;
           await this.wishlistService.removeFromWishlist(wishlistId).toPromise();
           console.log('Product removed from wishlist successfully');
-          alert('Product has been removed from your wishlist!');
+          this.popupService.showSuccess('Product has been removed from your wishlist!');
   
           await this.getUserWishlist(this.userId);
         } else {
-          alert('Product not found in your wishlist');
+          this.popupService.showError('Product not found in your wishlist.');
         }
       } catch (error) {
         console.error('Error removing product from wishlist:', error);
-        alert('There was an error while trying to remove the product from your wishlist.');
+        this.popupService.showError('There was an error while trying to remove the product from your wishlist.');
       }
     } else {
       console.warn('User is not logged in or product ID is missing');
-      alert('Please log in to remove the product from your wishlist');
+      this.popupService.showError('Please log in to remove the product from your wishlist.');
+      this.router.navigate(['/login']);
     }
   }
   

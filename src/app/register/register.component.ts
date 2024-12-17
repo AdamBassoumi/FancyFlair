@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { Utilisateur } from '../models/Utilisateur';
 import { UtilisateurService } from '../services/Utilisateur/utilisateur.service';
 import { Router } from '@angular/router';
+import { PopupService } from '../services/popup/popup.service';
 
 @Component({
   selector: 'app-register',
@@ -13,7 +14,8 @@ export class RegisterComponent {
   utilisateurs?: Utilisateur[];
 
   constructor(private utilisateurService: UtilisateurService,
-              private router: Router
+              private router: Router,
+              private popupService: PopupService,
   ) {}
 
   ngOnInit(): void {
@@ -39,6 +41,7 @@ export class RegisterComponent {
     this.utilisateurService.createUtilisateur(newUser).subscribe({
       next: (user: Utilisateur) => {
         console.log('User registered successfully:', user);
+        this.popupService.showSuccess('Registration successful');
         // Store user information in localStorage
         localStorage.setItem('user', JSON.stringify({ id: user.id, email: user.email }));
         // Navigate to the homepage or another route
@@ -46,6 +49,7 @@ export class RegisterComponent {
       },
       error: (err) => {
         console.error('Error during registration:', err);
+        this.popupService.showError('Registration failed');
         // Optionally handle the error (e.g., show an error message to the user)
       }
     });

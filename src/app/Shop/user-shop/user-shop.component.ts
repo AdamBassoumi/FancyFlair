@@ -5,6 +5,7 @@ import { ShopService } from '../../services/Shop/shop.service';
 import { CategoryService } from '../../services/Category/category.service';
 import { Router } from '@angular/router';
 import { ProduitService } from 'src/app/services/Produit/produit.service';
+import { PopupService } from 'src/app/services/popup/popup.service';
 
 @Component({
   selector: 'app-user-shop',
@@ -25,7 +26,8 @@ export class UserShopComponent {
     private shopService: ShopService,
     private categoryService: CategoryService,
     private produitService: ProduitService,
-    private router: Router // Inject Router for redirection
+    private router: Router, // Inject Router for redirection
+    private popupService: PopupService,
   ) {}
 
   ngOnInit(): void {
@@ -114,10 +116,12 @@ deleteProduct(id: number): void {
   this.produitService.deleteProduit(id).subscribe(
     () => {
       console.log(`Product with ID ${id} deleted successfully.`);
+      this.popupService.showSuccess('Product deleted successfully');
       this.loadProductsFromShop(); // Reload products after deletion
     },
     (error) => {
       console.error(`Error deleting product with ID ${id}`, error);
+      this.popupService.showError('There was an error while trying to delete the product.');
     }
   );
 }

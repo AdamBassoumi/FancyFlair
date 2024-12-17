@@ -6,6 +6,7 @@ import { Category } from '../../models/Category';
 import { Produit } from '../../models/Produit';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
+import { PopupService } from 'src/app/services/popup/popup.service';
 
 @Component({
   selector: 'app-add-product',
@@ -27,7 +28,8 @@ export class AddProductComponent implements OnInit {
     private categoryService: CategoryService,
     private produitService: ProduitService,
     private http: HttpClient,
-        private router: Router, // Inject Router for navigation
+    private router: Router, // Inject Router for navigation
+    private popupService: PopupService,
   ) {}
 
   ngOnInit(): void {
@@ -67,7 +69,7 @@ export class AddProductComponent implements OnInit {
     }
   
     if (!category) {
-      alert('Category is required');
+      this.popupService.showError('Category is required');
       return;
     }
   
@@ -75,12 +77,12 @@ export class AddProductComponent implements OnInit {
     const price = formData['product-price'];
     
     if (!name) {
-      alert('Product name is required');
+      this.popupService.showError('Product name is required');
       return;
     }
   
     if (!price || isNaN(price) || price <= 0) {
-      alert('Product price is required and must be a positive number');
+      this.popupService.showError('Invalid product price');
       return;
     }
   
@@ -99,11 +101,13 @@ export class AddProductComponent implements OnInit {
     this.produitService.createProduit(newProduit, +shopId, category.id).subscribe(
       (produit) => {
         console.log('Produit successfully added:', produit);
+        this.popupService.showSuccess('Produit successfully added');
         this.router.navigate(['/MyShop']);
         
       },
       (error) => {
         console.error('Error adding produit:', error);
+        this.popupService.showError('Error adding product');
       }
     );
   
@@ -115,13 +119,16 @@ export class AddProductComponent implements OnInit {
       this.http.post('http://localhost:5000/upload', uploadFormData).subscribe(
         response => {
           console.log('File uploaded successfully:', response);
+          this.popupService.showSuccess('File uploaded successfully');
         },
         error => {
           console.error('Error uploading file:', error);
+          this.popupService.showError('Error uploading file');
         }
       );
     } else {
       console.log('No file selected');
+      this.popupService.showError('No file selected');
     }
   }
   

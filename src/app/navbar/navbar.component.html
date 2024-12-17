@@ -31,23 +31,34 @@
         class="text-gray-600 hover:text-gray-800 bg-gray-200 rounded-xl py-2 px-3">Manage Shop</a>
       <button><img src="assets/heart.svg" alt="Logo" class="h-6" (click)="toggleWishlist()">
       </button>
+
       <div class="relative inline-block">
         <!-- Dropdown Trigger Button -->
         <button
-        class="flex items-center space-x-2 bg-gray-100 px-4 py-2 rounded-lg shadow hover:bg-gray-200 focus:outline-none"
-        (click)="toggleDropdown()">
-        <img src="assets/shops.png" alt="follow" class="h-6" />
-      </button>
-    
-      <!-- Dropdown Menu -->
-      <ul *ngIf="dropdownOpen"
-        class="absolute right-0 mt-2 bg-white border border-gray-200 rounded-lg shadow w-48 max-h-60 overflow-y-auto z-50">
-        <li *ngFor="let shop of favoriteShops" class="hover:bg-gray-100 cursor-pointer text-gray-700">
-          <a [routerLink]="['/Shop', shop.id]" class="block px-4 py-2 text-gray-700">
-            {{ shop.nom }}
-          </a>
-        </li>
-      </ul>
+          class="flex items-center space-x-2 bg-gray-100 px-4 py-2 rounded-lg shadow hover:bg-gray-200 focus:outline-none"
+          (click)="toggleDropdown()">
+          <img src="assets/shops.png" alt="follow" class="h-6" />
+        </button>
+      
+        <!-- Dropdown Menu -->
+        <ul *ngIf="dropdownOpen" 
+            class="absolute right-0 mt-2 bg-white border border-gray-200 rounded-lg shadow w-48 max-h-60 overflow-y-auto z-50">
+          <!-- Show if favoriteShops has items -->
+          <ng-container *ngIf="favoriteShops.length > 0; else emptyMessage">
+            <li *ngFor="let shop of favoriteShops" class="hover:bg-gray-100 cursor-pointer text-gray-700">
+              <a [routerLink]="['/Shop', shop.id]" class="block px-4 py-2 text-gray-700">
+                {{ shop.nom }}
+              </a>
+            </li>
+          </ng-container>
+          
+          <!-- Placeholder for empty state -->
+          <ng-template #emptyMessage>
+            <li class="p-4 text-gray-500 text-center">
+              No favorite shops yet.
+            </li>
+          </ng-template>
+        </ul>
       </div>
 
     </div>

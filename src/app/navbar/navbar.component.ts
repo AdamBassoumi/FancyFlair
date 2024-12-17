@@ -98,16 +98,9 @@ export class NavbarComponent implements OnInit {
 
   logout(): void {
     localStorage.removeItem('user');
-    localStorage.removeItem('shop'); // Clear shop key on logout
+    localStorage.removeItem('shop');
     console.log('User logged out');
     this.router.navigate(['/']);
   }
-  
-  triggerSuccess() {
-    this.popupService.showSuccess('Operation was successful!');
-  }
 
-  triggerError() {
-    this.popupService.showError('An error occurred. Please try again.');
-  }
 }
